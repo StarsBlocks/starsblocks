@@ -104,6 +104,7 @@ export default function DashboardPage() {
         </section>
 
         <UserRecyclingExperience userId={session.user?.id} />
+        <UserRecyclingExperience userId={session.user?.id} />
 
         <section className="dashboard-section">
           <h3>Acciones rápidas</h3>

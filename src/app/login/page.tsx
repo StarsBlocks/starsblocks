@@ -1,10 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useEffect } from 'react'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -43,7 +42,6 @@ export default function LoginPage() {
     if (result?.error) {
       setError('Email o contraseña incorrectos')
     } else {
-      // Después del login, recargar para obtener la sesión y redirigir
       router.refresh()
     }
   }

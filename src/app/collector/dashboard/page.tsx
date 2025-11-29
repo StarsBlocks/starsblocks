@@ -188,8 +188,11 @@ export default function CollectorDashboardPage() {
           </form>
         </section>
 
+<<<<<<< HEAD
         <RecyclingGraph role="collector" collectorId={session.user?.id} />
 
+=======
+>>>>>>> 6d68caa (Add: Global styles to all app)
         <section className="dashboard-section">
           <h3>Recolecciones recientes</h3>
           {recentTransactions.length === 0 ? (
@@ -201,7 +204,11 @@ export default function CollectorDashboardPage() {
                   <th>Usuario</th>
                   <th>Material</th>
                   <th>Cantidad</th>
+<<<<<<< HEAD
                   <th>Puntos</th>
+=======
+                  <th>Tokens</th>
+>>>>>>> 6d68caa (Add: Global styles to all app)
                 </tr>
               </thead>
               <tbody>
@@ -212,7 +219,11 @@ export default function CollectorDashboardPage() {
                     <td>{t.amount} kg</td>
                     <td>
                       <span className="status-badge status-badge--confirmed">
+<<<<<<< HEAD
                         +{t.pointsEarned}
+=======
+                        +{t.tokensEarned}
+>>>>>>> 6d68caa (Add: Global styles to all app)
                       </span>
                     </td>
                   </tr>
