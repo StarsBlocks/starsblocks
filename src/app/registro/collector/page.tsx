@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-export default function RegistroPage() {
+export default function RegistroCollectorPage() {
   const router = useRouter()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -20,9 +20,13 @@ export default function RegistroPage() {
       password: formData.get('password'),
       name: formData.get('name'),
       dni: formData.get('dni'),
+      company: formData.get('company'),
+      zone: formData.get('zone'),
+      vehicle: formData.get('vehicle'),
+      license: formData.get('license'),
     }
 
-    const res = await fetch('/api/auth/register', {
+    const res = await fetch('/api/collectors', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -36,29 +40,42 @@ export default function RegistroPage() {
       return
     }
 
-    // Registro exitoso, redirigir a login
     router.push('/login?registered=true')
   }
 
   return (
     <main style={styles.container}>
       <div style={styles.card}>
-        <h1 style={styles.title}>Crear Cuenta</h1>
-        <p style={styles.subtitle}>Únete a StarsBlocks</p>
+        <h1 style={styles.title}>Registro Recolector</h1>
+        <p style={styles.subtitle}>Únete como recolector</p>
 
         {error && <p style={styles.error}>{error}</p>}
 
         <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.field}>
-            <label htmlFor="name">Nombre completo</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              style={styles.input}
-              placeholder="Juan Pérez"
-            />
+          <div style={styles.row}>
+            <div style={styles.field}>
+              <label htmlFor="name">Nombre completo</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                style={styles.input}
+                placeholder="Juan Pérez"
+              />
+            </div>
+
+            <div style={styles.field}>
+              <label htmlFor="dni">DNI</label>
+              <input
+                type="text"
+                id="dni"
+                name="dni"
+                required
+                style={styles.input}
+                placeholder="12345678A"
+              />
+            </div>
           </div>
 
           <div style={styles.field}>
@@ -74,14 +91,50 @@ export default function RegistroPage() {
           </div>
 
           <div style={styles.field}>
-            <label htmlFor="dni">DNI</label>
+            <label htmlFor="company">Empresa</label>
             <input
               type="text"
-              id="dni"
-              name="dni"
+              id="company"
+              name="company"
               required
               style={styles.input}
-              placeholder="12345678A"
+              placeholder="Nombre de la empresa"
+            />
+          </div>
+
+          <div style={styles.row}>
+            <div style={styles.field}>
+              <label htmlFor="zone">Zona de recolección</label>
+              <input
+                type="text"
+                id="zone"
+                name="zone"
+                required
+                style={styles.input}
+                placeholder="Zona Norte"
+              />
+            </div>
+
+            <div style={styles.field}>
+              <label htmlFor="vehicle">Vehículo (placa)</label>
+              <input
+                type="text"
+                id="vehicle"
+                name="vehicle"
+                style={styles.input}
+                placeholder="ABC-123"
+              />
+            </div>
+          </div>
+
+          <div style={styles.field}>
+            <label htmlFor="license">Licencia/Permisos</label>
+            <input
+              type="text"
+              id="license"
+              name="license"
+              style={styles.input}
+              placeholder="Número de licencia"
             />
           </div>
 
@@ -99,7 +152,7 @@ export default function RegistroPage() {
           </div>
 
           <button type="submit" disabled={loading} style={styles.button}>
-            {loading ? 'Registrando...' : 'Registrarme'}
+            {loading ? 'Registrando...' : 'Registrarme como Recolector'}
           </button>
         </form>
 
@@ -107,7 +160,7 @@ export default function RegistroPage() {
           ¿Ya tienes cuenta? <Link href="/login">Inicia sesión</Link>
         </p>
         <p style={styles.link}>
-          ¿Eres recolector? <Link href="/registro/collector">Regístrate aquí</Link>
+          ¿Eres usuario? <Link href="/registro">Regístrate como usuario</Link>
         </p>
       </div>
     </main>
@@ -129,12 +182,13 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: '8px',
     boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
     width: '100%',
-    maxWidth: '400px',
+    maxWidth: '500px',
   },
   title: {
     margin: 0,
     fontSize: '1.5rem',
     textAlign: 'center',
+    color: '#f59e0b',
   },
   subtitle: {
     textAlign: 'center',
@@ -154,6 +208,11 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: 'column',
     gap: '1rem',
   },
+  row: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '1rem',
+  },
   field: {
     display: 'flex',
     flexDirection: 'column',
@@ -167,7 +226,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   button: {
     padding: '0.75rem',
-    backgroundColor: '#10b981',
+    backgroundColor: '#f59e0b',
     color: 'white',
     border: 'none',
     borderRadius: '4px',
@@ -178,5 +237,6 @@ const styles: { [key: string]: React.CSSProperties } = {
   link: {
     textAlign: 'center',
     marginTop: '1rem',
+    fontSize: '0.9rem',
   },
 }

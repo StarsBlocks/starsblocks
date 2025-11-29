@@ -2,17 +2,52 @@
 
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+
+interface UserData {
+  wallet?: string
+  totalKg?: number
+  totalTokens?: number
+  totalTransactions?: number
+}
 
 export default function DashboardPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const [userData, setUserData] = useState<UserData>({})
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login')
     }
   }, [status, router])
+
+  // Cargar datos del usuario
+  useEffect(() => {
+    async function loadUserData() {
+      console.log('Session:', session)
+      console.log('User ID:', session?.user?.id)
+      if (session?.user?.id) {
+        const res = await fetch(`/api/users/${session.user.id}`)
+        console.log('Response status:', res.status)
+        if (res.ok) {
+          const data = await res.json()
+          console.log('User data:', data)
+          setUserData(data)
+        }
+      }
+    }
+    loadUserData()
+  }, [session])
+
+  function copyWallet() {
+    if (userData.wallet) {
+      navigator.clipboard.writeText(userData.wallet)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
 
   if (status === 'loading') {
     return (
@@ -44,17 +79,32 @@ export default function DashboardPage() {
           <p>Email: {session.user?.email}</p>
         </section>
 
+        <section style={styles.walletSection}>
+          <h3>Tu Wallet (ID para reciclaje)</h3>
+          <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
+            Muestra este código al recolector para registrar tu reciclaje
+          </p>
+          <div style={styles.walletBox}>
+            <code style={styles.walletCode}>
+              {userData.wallet || 'Cargando...'}
+            </code>
+            <button onClick={copyWallet} style={styles.copyBtn}>
+              {copied ? '¡Copiado!' : 'Copiar'}
+            </button>
+          </div>
+        </section>
+
         <section style={styles.stats}>
           <div style={styles.statCard}>
-            <h3>0 kg</h3>
+            <h3>{userData.totalKg || 0} kg</h3>
             <p>Total reciclado</p>
           </div>
           <div style={styles.statCard}>
-            <h3>0</h3>
+            <h3>{userData.totalTokens || 0}</h3>
             <p>Tokens ganados</p>
           </div>
           <div style={styles.statCard}>
-            <h3>0</h3>
+            <h3>{userData.totalTransactions || 0}</h3>
             <p>Transacciones</p>
           </div>
         </section>
@@ -62,7 +112,6 @@ export default function DashboardPage() {
         <section style={styles.actions}>
           <h3>Acciones rápidas</h3>
           <div style={styles.actionButtons}>
-            <button style={styles.actionBtn}>Registrar reciclaje</button>
             <button style={styles.actionBtnSecondary}>Ver historial</button>
           </div>
         </section>
@@ -111,6 +160,37 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: '1.5rem',
     borderRadius: '8px',
     marginBottom: '1.5rem',
+  },
+  walletSection: {
+    backgroundColor: 'white',
+    padding: '1.5rem',
+    borderRadius: '8px',
+    marginBottom: '1.5rem',
+  },
+  walletBox: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    backgroundColor: '#f0fdf4',
+    padding: '1rem',
+    borderRadius: '8px',
+    border: '1px solid #10b981',
+  },
+  walletCode: {
+    fontFamily: 'monospace',
+    fontSize: '0.9rem',
+    flex: 1,
+    wordBreak: 'break-all',
+  },
+  copyBtn: {
+    padding: '0.5rem 1rem',
+    backgroundColor: '#10b981',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '0.875rem',
+    whiteSpace: 'nowrap',
   },
   stats: {
     display: 'grid',
