@@ -1,5 +1,11 @@
 import { wallet } from '@/lib/wallet'
-import { Script, Utils } from '@bsv/sdk'
+import { Script, Utils, WalletInterface } from '@bsv/sdk'
+import { NextResponse } from 'next/server'
+import { PrivateKey, PublicKey, KeyDeriver } from '@bsv/sdk'
+import { Wallet, WalletStorageManager, WalletSigner, Services, StorageClient, Chain } from '@bsv/wallet-toolbox'
+
+const NETWORK = (process.env.NETWORK || 'main') as Chain
+const STORAGE_URL = process.env.STORAGE_URL || 'https://storage.babbage.systems'
 
 export interface WasteRegistrationData {
   user: string
@@ -61,4 +67,32 @@ export async function verifyTransaction(txHash: string): Promise<boolean> {
   // TODO: Verificar transacción en blockchain
   console.log('Verificando tx:', txHash)
   return true
+}
+
+export async function createWallet(): Promise<WalletInterface> {
+  try {
+    // Generate a new random private key
+    const privateKey = PrivateKey.fromRandom()
+    const publicKey = privateKey.toPublicKey()
+    const address = publicKey.toAddress()
+
+    // Initialize wallet components
+    const keyDeriver = new KeyDeriver(privateKey)
+    const storageManager = new WalletStorageManager(keyDeriver.identityKey)
+    const signer = new WalletSigner(NETWORK, keyDeriver, storageManager)
+    const services = new Services(NETWORK)
+    const wallet = new Wallet(signer, services)
+    
+    // Connect to storage
+    const client = new StorageClient(wallet, STORAGE_URL)
+    await client.makeAvailable()
+    await storageManager.addWalletStorageProvider(client)
+
+    // Return the created wallet
+    return wallet
+
+  } catch (error: any) {
+    console.error('Create Wallet Error:', error)
+    throw error
+  }
 }
