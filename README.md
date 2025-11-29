@@ -2,6 +2,9 @@
 
 Registro de basura en blockchain.
 
+PONER FOTO DE BASURA 
+
+
 ## Requisitos
 
 - Node.js 18+
