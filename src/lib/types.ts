@@ -4,11 +4,12 @@ import { ObjectId } from 'mongodb'
 export interface User {
   _id?: ObjectId
   email: string
-  password: string          // hash de la contraseña
+  password: string              // hash de la contraseña
   name: string
   dni?: string
   role: 'user'
-  wallet?: string           // se añade después con blockchain
+  wallet?: string               // publicKey (sin encriptar)
+  encryptedPrivateKey?: string  // privateKey encriptado con password del usuario
   createdAt: Date
 }
 
