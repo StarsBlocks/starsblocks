@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { connectToDatabase } from '@/lib/mongodb'
 import { Transaction, ProductType, User } from '@/lib/types'
+import { registerWasteOnChain } from '@/lib/blockchain'
 
 // GET /api/transactions - Lista transacciones
 export async function GET(request: NextRequest) {
@@ -45,14 +46,25 @@ export async function POST(request: NextRequest) {
 
   const tokensEarned = body.amount * productType.tokensPerKg
 
+  // Registrar en blockchain
+  const txHash = await registerWasteOnChain({
+    user: user.wallet || '',
+    collector_id: body.collectorId,
+    product_type: productType.name,
+    amount: body.amount,
+    points: tokensEarned
+  })
+
   const transaction: Transaction = {
     userId: user._id!,
     collectorId: new ObjectId(body.collectorId),
     productTypeId: new ObjectId(body.productTypeId),
     amount: body.amount,
     tokensEarned,
-    status: 'pending',
+    status: 'validated',
+    txHash,
     createdAt: new Date(),
+    validatedAt: new Date(),
   }
 
   const result = await db.collection<Transaction>('transactions').insertOne(transaction)
@@ -61,5 +73,6 @@ export async function POST(request: NextRequest) {
     _id: result.insertedId,
     userName: user.name,
     productName: productType.name,
+    txHash,
   }, { status: 201 })
 }

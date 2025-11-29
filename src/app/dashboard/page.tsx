@@ -11,10 +11,20 @@ interface UserData {
   totalTransactions?: number
 }
 
+interface Transaction {
+  _id: string
+  productTypeId: string
+  amount: number
+  tokensEarned: number
+  txHash?: string
+  createdAt: string
+}
+
 export default function DashboardPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [userData, setUserData] = useState<UserData>({})
+  const [transactions, setTransactions] = useState<Transaction[]>([])
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
@@ -34,6 +44,19 @@ export default function DashboardPage() {
       }
     }
     loadUserData()
+  }, [session])
+
+  useEffect(() => {
+    async function loadTransactions() {
+      if (session?.user?.id) {
+        const res = await fetch(`/api/transactions?userId=${session.user.id}`)
+        if (res.ok) {
+          const data = await res.json()
+          setTransactions(data)
+        }
+      }
+    }
+    loadTransactions()
   }, [session])
 
   function copyWallet() {
@@ -103,10 +126,48 @@ export default function DashboardPage() {
         </section>
 
         <section className="dashboard-section">
-          <h3>Acciones rápidas</h3>
-          <div className="dashboard-actions">
-            <button className="btn-action btn-action--secondary">Ver historial</button>
-          </div>
+          <h3>Historial de reciclaje</h3>
+          {transactions.length === 0 ? (
+            <p>No tienes transacciones aún</p>
+          ) : (
+            <table className="transactions-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Cantidad</th>
+                  <th>Tokens</th>
+                  <th>Blockchain</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.map((t) => (
+                  <tr key={t._id}>
+                    <td>{new Date(t.createdAt).toLocaleDateString()}</td>
+                    <td>{t.amount} kg</td>
+                    <td>
+                      <span className="status-badge status-badge--confirmed">
+                        +{t.tokensEarned}
+                      </span>
+                    </td>
+                    <td>
+                      {t.txHash ? (
+                        <a
+                          href={`https://whatsonchain.com/tx/${t.txHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="tx-link"
+                        >
+                          Ver TX
+                        </a>
+                      ) : (
+                        '-'
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </section>
       </div>
     </main>

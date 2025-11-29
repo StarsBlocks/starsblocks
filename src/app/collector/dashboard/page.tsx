@@ -16,6 +16,7 @@ interface RecentTransaction {
   productName: string
   amount: number
   tokensEarned: number
+  txHash?: string
   createdAt: string
 }
 
@@ -199,6 +200,7 @@ export default function CollectorDashboardPage() {
                   <th>Material</th>
                   <th>Cantidad</th>
                   <th>Tokens</th>
+                  <th>Blockchain</th>
                 </tr>
               </thead>
               <tbody>
@@ -211,6 +213,20 @@ export default function CollectorDashboardPage() {
                       <span className="status-badge status-badge--confirmed">
                         +{t.tokensEarned}
                       </span>
+                    </td>
+                    <td>
+                      {t.txHash ? (
+                        <a
+                          href={`https://whatsonchain.com/tx/${t.txHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="tx-link"
+                        >
+                          Ver TX
+                        </a>
+                      ) : (
+                        '-'
+                      )}
                     </td>
                   </tr>
                 ))}
