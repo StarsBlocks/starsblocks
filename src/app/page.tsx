@@ -1,67 +1,112 @@
 import Link from 'next/link'
 
+const starCategories = [
+  {
+    key: 'vidrio',
+    label: 'Vidrio',
+    description: 'Botellas y frascos transparentes se codifican en verde neón para un seguimiento impecable.',
+  },
+  {
+    key: 'papel',
+    label: 'Papel',
+    description: 'Cartón y fibras se vuelven bloques celestes para monitorear fardos limpios.',
+  },
+  {
+    key: 'metal',
+    label: 'Metal',
+    description: 'Latas y chatarra ligera inspiran destellos dorados de alto valor.',
+  },
+  {
+    key: 'aceite',
+    label: 'Aceite',
+    description: 'Residuos aceitosos brillan en naranja ámbar para activar protocolos de recuperación segura.',
+  },
+  {
+    key: 'envases',
+    label: 'Envases',
+    description: 'Plásticos multicolor forman el punto violeta para medir el flujo hacia nuevos productos.',
+  },
+]
+
 export default function Home() {
   return (
-    <main style={styles.container}>
-      <div style={styles.hero}>
-        <h1 style={styles.title}>StarsBlocks</h1>
-        <p style={styles.subtitle}>Recicla, gana tokens y ayuda al planeta</p>
+    <main className="home-shell">
+      <section className="hero-panel">
+        <div className="hero-copy">
+          <p className="home-tag">
+            <span role="img" aria-hidden="true">
+              🧱
+            </span>{' '}
+            Temporada 01 · Beta abierta
+          </p>
 
-        <div style={styles.buttons}>
-          <Link href="/login" style={styles.btnPrimary}>
-            Iniciar Sesión
-          </Link>
-          <Link href="/registro" style={styles.btnSecondary}>
-            Crear Cuenta
-          </Link>
+          <h1 className="home-title">Convierte tu reciclaje en una partida infinita.</h1>
+
+          <p className="home-lead">
+            StarsBlocks es un juego urbano donde cada botella, lata o tetrabrik se transforma en un
+            bloque digital. Documenta tu impacto en blockchain, acumula tokens verdes y reta a tu
+            comunidad por el primer puesto del tablero.
+          </p>
+
+          <div className="home-cta">
+            <Link className="btn btn-primary" href="/registro">
+              Crear cuenta gratuita
+            </Link>
+            <Link className="btn btn-ghost" href="/login">
+              Ya tengo una cuenta
+            </Link>
+          </div>
+
+          <p className="home-footnote">
+            Cada bloque almacenado valida peso, origen y categoría del residuo. Tus estadísticas se
+            sincronizan en segundos y tu progreso nunca se pierde.
+          </p>
         </div>
-      </div>
+
+        <div className="hero-insights">
+          <section className="star-lab">
+            <header className="star-lab__head">
+              <h2>Así se arma la estrella de residuos.</h2>
+              <p>
+                Observa cómo los bloques de cada material viajan desde el centro y completan los cinco
+                puntos de la estrella. Es la misma secuencia que usa la app para validar categorías.
+              </p>
+            </header>
+
+            <div
+              className="star-assembly"
+              role="img"
+              aria-label="Animación de bloques organizándose en estrella de cinco puntas"
+            >
+              <div className="star-outline" aria-hidden="true" />
+              {starCategories.map((category, index) => (
+                <span
+                  key={category.key}
+                  className={`star-block star-block--${category.key}`}
+                  style={{ animationDelay: `${index * 0.35}s` }}
+                />
+              ))}
+            </div>
+
+            <ul className="star-legend">
+              {starCategories.map((category) => (
+                <li key={category.key}>
+                  <span
+                    className="legend-swatch"
+                    style={{ backgroundColor: `var(--block-${category.key})` }}
+                  />
+                  <div>
+                    <p className="legend-label">{category.label}</p>
+                    <p className="legend-description">{category.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+
+        </div>
+      </section>
     </main>
   )
-}
-
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  hero: {
-    textAlign: 'center',
-    padding: '2rem',
-  },
-  title: {
-    fontSize: '3rem',
-    color: '#10b981',
-    margin: 0,
-  },
-  subtitle: {
-    fontSize: '1.25rem',
-    color: '#666',
-    marginBottom: '2rem',
-  },
-  buttons: {
-    display: 'flex',
-    gap: '1rem',
-    justifyContent: 'center',
-  },
-  btnPrimary: {
-    padding: '0.75rem 2rem',
-    backgroundColor: '#10b981',
-    color: 'white',
-    textDecoration: 'none',
-    borderRadius: '4px',
-    fontSize: '1rem',
-  },
-  btnSecondary: {
-    padding: '0.75rem 2rem',
-    backgroundColor: 'white',
-    color: '#10b981',
-    textDecoration: 'none',
-    borderRadius: '4px',
-    border: '1px solid #10b981',
-    fontSize: '1rem',
-  },
 }

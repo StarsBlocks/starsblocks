@@ -44,199 +44,143 @@ export default function RegistroCollectorPage() {
   }
 
   return (
-    <main style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Registro Recolector</h1>
-        <p style={styles.subtitle}>Únete como recolector</p>
+    <main className="auth-shell">
+      <div className="auth-panel auth-panel--wide">
+        <div className="auth-heading">
+          <h1>Registro Recolector</h1>
+          <p>Únete como recolector y registra transacciones de reciclaje</p>
+        </div>
 
-        {error && <p style={styles.error}>{error}</p>}
+        {error && <p className="auth-error">{error}</p>}
 
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.row}>
-            <div style={styles.field}>
-              <label htmlFor="name">Nombre completo</label>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <div className="auth-row">
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="name">
+                Nombre completo
+              </label>
               <input
+                className="auth-input"
                 type="text"
                 id="name"
                 name="name"
                 required
-                style={styles.input}
                 placeholder="Juan Pérez"
               />
             </div>
 
-            <div style={styles.field}>
-              <label htmlFor="dni">DNI</label>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="dni">
+                DNI
+              </label>
               <input
+                className="auth-input"
                 type="text"
                 id="dni"
                 name="dni"
                 required
-                style={styles.input}
                 placeholder="12345678A"
               />
             </div>
           </div>
 
-          <div style={styles.field}>
-            <label htmlFor="email">Email</label>
+          <div className="auth-field">
+            <label className="auth-label" htmlFor="email">
+              Email
+            </label>
             <input
+              className="auth-input"
               type="email"
               id="email"
               name="email"
               required
-              style={styles.input}
               placeholder="tu@email.com"
             />
           </div>
 
-          <div style={styles.field}>
-            <label htmlFor="company">Empresa</label>
+          <div className="auth-field">
+            <label className="auth-label" htmlFor="company">
+              Empresa
+            </label>
             <input
+              className="auth-input"
               type="text"
               id="company"
               name="company"
               required
-              style={styles.input}
               placeholder="Nombre de la empresa"
             />
           </div>
 
-          <div style={styles.row}>
-            <div style={styles.field}>
-              <label htmlFor="zone">Zona de recolección</label>
+          <div className="auth-row">
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="zone">
+                Zona de recolección
+              </label>
               <input
+                className="auth-input"
                 type="text"
                 id="zone"
                 name="zone"
                 required
-                style={styles.input}
                 placeholder="Zona Norte"
               />
             </div>
 
-            <div style={styles.field}>
-              <label htmlFor="vehicle">Vehículo (placa)</label>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="vehicle">
+                Vehículo (placa)
+              </label>
               <input
+                className="auth-input"
                 type="text"
                 id="vehicle"
                 name="vehicle"
-                style={styles.input}
                 placeholder="ABC-123"
               />
             </div>
           </div>
 
-          <div style={styles.field}>
-            <label htmlFor="license">Licencia/Permisos</label>
+          <div className="auth-field">
+            <label className="auth-label" htmlFor="license">
+              Licencia/Permisos
+            </label>
             <input
+              className="auth-input"
               type="text"
               id="license"
               name="license"
-              style={styles.input}
               placeholder="Número de licencia"
             />
           </div>
 
-          <div style={styles.field}>
-            <label htmlFor="password">Contraseña</label>
+          <div className="auth-field">
+            <label className="auth-label" htmlFor="password">
+              Contraseña
+            </label>
             <input
+              className="auth-input"
               type="password"
               id="password"
               name="password"
               required
               minLength={6}
-              style={styles.input}
               placeholder="Mínimo 6 caracteres"
             />
           </div>
 
-          <button type="submit" disabled={loading} style={styles.button}>
+          <button className="auth-button" type="submit" disabled={loading}>
             {loading ? 'Registrando...' : 'Registrarme como Recolector'}
           </button>
         </form>
 
-        <p style={styles.link}>
+        <p className="auth-link">
           ¿Ya tienes cuenta? <Link href="/login">Inicia sesión</Link>
         </p>
-        <p style={styles.link}>
+        <p className="auth-link">
           ¿Eres usuario? <Link href="/registro">Regístrate como usuario</Link>
         </p>
       </div>
     </main>
   )
-}
-
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: '1rem',
-  },
-  card: {
-    backgroundColor: 'white',
-    padding: '2rem',
-    borderRadius: '8px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-    width: '100%',
-    maxWidth: '500px',
-  },
-  title: {
-    margin: 0,
-    fontSize: '1.5rem',
-    textAlign: 'center',
-    color: '#f59e0b',
-  },
-  subtitle: {
-    textAlign: 'center',
-    color: '#666',
-    marginBottom: '1.5rem',
-  },
-  error: {
-    backgroundColor: '#fee',
-    color: '#c00',
-    padding: '0.75rem',
-    borderRadius: '4px',
-    marginBottom: '1rem',
-    textAlign: 'center',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
-  },
-  row: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '1rem',
-  },
-  field: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.25rem',
-  },
-  input: {
-    padding: '0.75rem',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-    fontSize: '1rem',
-  },
-  button: {
-    padding: '0.75rem',
-    backgroundColor: '#f59e0b',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '1rem',
-    cursor: 'pointer',
-    marginTop: '0.5rem',
-  },
-  link: {
-    textAlign: 'center',
-    marginTop: '1rem',
-    fontSize: '0.9rem',
-  },
 }
