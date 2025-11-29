@@ -1,11 +1,5 @@
 import { wallet } from '@/lib/wallet'
-import { Script, Utils, WalletInterface } from '@bsv/sdk'
-import { NextResponse } from 'next/server'
-import { PrivateKey, PublicKey, KeyDeriver } from '@bsv/sdk'
-import { Wallet, WalletStorageManager, WalletSigner, Services, StorageClient, Chain } from '@bsv/wallet-toolbox'
-
-const NETWORK = (process.env.NETWORK || 'main') as Chain
-const STORAGE_URL = process.env.STORAGE_URL || 'https://storage.babbage.systems'
+import { Script, Utils, PrivateKey } from '@bsv/sdk'
 
 export interface WasteRegistrationData {
   user: string
@@ -69,27 +63,32 @@ export async function verifyTransaction(txHash: string): Promise<boolean> {
   return true
 }
 
-export async function createWallet(): Promise<WalletInterface> {
+export interface WalletKeys {
+  publicKey: string
+  privateKey: string
+  address: string
+}
+
+export async function createWallet(): Promise<WalletKeys> {
   try {
     // Generate a new random private key
     const privateKey = PrivateKey.fromRandom()
     const publicKey = privateKey.toPublicKey()
     const address = publicKey.toAddress()
 
-    // Initialize wallet components
-    const keyDeriver = new KeyDeriver(privateKey)
-    const storageManager = new WalletStorageManager(keyDeriver.identityKey)
-    const signer = new WalletSigner(NETWORK, keyDeriver, storageManager)
-    const services = new Services(NETWORK)
-    const wallet = new Wallet(signer, services)
-    
-    // Connect to storage
-    const client = new StorageClient(wallet, STORAGE_URL)
-    await client.makeAvailable()
-    await storageManager.addWalletStorageProvider(client)
+    // Log wallet info for debugging
+    console.log('=== New Wallet Created ===')
+    console.log('Private Key:', privateKey.toHex())
+    console.log('Public Key:', publicKey.toString())
+    console.log('Address:', address)
+    console.log('==========================')
 
-    // Return the created wallet
-    return wallet
+    // Return keys as object
+    return {
+      publicKey: publicKey.toString(),
+      privateKey: privateKey.toHex(),
+      address: String(address)
+    }
 
   } catch (error: any) {
     console.error('Create Wallet Error:', error)
