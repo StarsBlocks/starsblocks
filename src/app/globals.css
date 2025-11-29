@@ -1242,7 +1242,6 @@ a {
   .star-legend {
     gap: 0.75rem;
   }
-
   .auth-row {
     grid-template-columns: 1fr;
   }
