@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { connectToDatabase } from '@/lib/mongodb'
-import { Transaction, ProductType } from '@/lib/types'
+import { Transaction, ProductType, User } from '@/lib/types'
 
 // GET /api/transactions - Lista transacciones
 export async function GET(request: NextRequest) {
   const { db } = await connectToDatabase()
   const { searchParams } = new URL(request.url)
   const userId = searchParams.get('userId')
+  const collectorId = searchParams.get('collectorId')
   const status = searchParams.get('status')
 
   const filter: Record<string, unknown> = {}
   if (userId) filter.userId = new ObjectId(userId)
+  if (collectorId) filter.collectorId = new ObjectId(collectorId)
   if (status) filter.status = status
 
   const transactions = await db.collection<Transaction>('transactions').find(filter).toArray()
@@ -22,6 +24,15 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const { db } = await connectToDatabase()
   const body = await request.json()
+
+  // Buscar usuario por wallet (publicAddress del NFC)
+  const user = await db.collection<User>('users').findOne({
+    wallet: body.userWallet
+  })
+
+  if (!user) {
+    return NextResponse.json({ error: 'Usuario no encontrado con esa wallet' }, { status: 404 })
+  }
 
   // Obtener el tipo de producto para calcular tokens
   const productType = await db.collection<ProductType>('productTypes').findOne({
@@ -35,7 +46,8 @@ export async function POST(request: NextRequest) {
   const tokensEarned = body.amount * productType.tokensPerKg
 
   const transaction: Transaction = {
-    userId: new ObjectId(body.userId),
+    userId: user._id!,
+    collectorId: new ObjectId(body.collectorId),
     productTypeId: new ObjectId(body.productTypeId),
     amount: body.amount,
     tokensEarned,
@@ -44,5 +56,10 @@ export async function POST(request: NextRequest) {
   }
 
   const result = await db.collection<Transaction>('transactions').insertOne(transaction)
-  return NextResponse.json({ ...transaction, _id: result.insertedId }, { status: 201 })
+  return NextResponse.json({
+    ...transaction,
+    _id: result.insertedId,
+    userName: user.name,
+    productName: productType.name,
+  }, { status: 201 })
 }

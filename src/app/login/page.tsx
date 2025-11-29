@@ -1,14 +1,26 @@
 'use client'
 
-import { useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { useState, useEffect } from 'react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function LoginPage() {
   const router = useRouter()
+  const { data: session } = useSession()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  // Si ya está logueado, redirigir según rol
+  useEffect(() => {
+    if (session?.user) {
+      if (session.user.role === 'collector') {
+        router.push('/collector/dashboard')
+      } else {
+        router.push('/dashboard')
+      }
+    }
+  }, [session, router])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -30,7 +42,7 @@ export default function LoginPage() {
     if (result?.error) {
       setError('Email o contraseña incorrectos')
     } else {
-      router.push('/dashboard')
+      router.refresh()
     }
   }
 

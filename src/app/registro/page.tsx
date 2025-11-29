@@ -36,7 +36,6 @@ export default function RegistroPage() {
       return
     }
 
-    // Registro exitoso, redirigir a login
     router.push('/login?registered=true')
   }
 
@@ -115,6 +114,9 @@ export default function RegistroPage() {
 
         <p className="auth-link">
           ¿Ya tienes cuenta? <Link href="/login">Inicia sesión</Link>
+        </p>
+        <p className="auth-link">
+          ¿Eres recolector? <Link href="/registro/collector">Regístrate aquí</Link>
         </p>
       </div>
     </main>

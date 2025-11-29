@@ -1,13 +1,29 @@
 import { ObjectId } from 'mongodb'
 
-// Usuario (reciclador o recolector)
+// Usuario reciclador
 export interface User {
   _id?: ObjectId
   email: string
   password: string          // hash de la contraseña
   name: string
   dni?: string
-  role: 'user' | 'collector'
+  role: 'user'
+  wallet?: string           // se añade después con blockchain
+  createdAt: Date
+}
+
+// Recolector
+export interface Collector {
+  _id?: ObjectId
+  email: string
+  password: string          // hash de la contraseña
+  name: string
+  dni?: string
+  role: 'collector'
+  company: string           // empresa a la que pertenece
+  zone: string              // zona de recolección
+  vehicle?: string          // vehículo asignado (placa)
+  license?: string          // licencia/permisos
   wallet?: string           // se añade después con blockchain
   createdAt: Date
 }
@@ -25,6 +41,7 @@ export interface ProductType {
 export interface Transaction {
   _id?: ObjectId
   userId: ObjectId           // quién recicla
+  collectorId: ObjectId      // quién recolectó
   productTypeId: ObjectId    // qué material
   amount: number             // cantidad en kg
   tokensEarned: number       // tokens ganados
