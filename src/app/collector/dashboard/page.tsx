@@ -17,6 +17,7 @@ interface RecentTransaction {
   productName: string
   amount: number
   pointsEarned: number
+  txHash?: string
   createdAt: string
 }
 
@@ -187,12 +188,7 @@ export default function CollectorDashboardPage() {
             </button>
           </form>
         </section>
-
-<<<<<<< HEAD
         <RecyclingGraph role="collector" collectorId={session.user?.id} />
-
-=======
->>>>>>> 6d68caa (Add: Global styles to all app)
         <section className="dashboard-section">
           <h3>Recolecciones recientes</h3>
           {recentTransactions.length === 0 ? (
@@ -204,11 +200,8 @@ export default function CollectorDashboardPage() {
                   <th>Usuario</th>
                   <th>Material</th>
                   <th>Cantidad</th>
-<<<<<<< HEAD
                   <th>Puntos</th>
-=======
-                  <th>Tokens</th>
->>>>>>> 6d68caa (Add: Global styles to all app)
+                  <th>Blockchain</th>
                 </tr>
               </thead>
               <tbody>
@@ -219,12 +212,22 @@ export default function CollectorDashboardPage() {
                     <td>{t.amount} kg</td>
                     <td>
                       <span className="status-badge status-badge--confirmed">
-<<<<<<< HEAD
                         +{t.pointsEarned}
-=======
-                        +{t.tokensEarned}
->>>>>>> 6d68caa (Add: Global styles to all app)
                       </span>
+                    </td>
+                    <td>
+                      {t.txHash ? (
+                        <a
+                          href={`https://whatsonchain.com/tx/${t.txHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="tx-link"
+                        >
+                          Ver TX
+                        </a>
+                      ) : (
+                        '-'
+                      )}
                     </td>
                   </tr>
                 ))}
