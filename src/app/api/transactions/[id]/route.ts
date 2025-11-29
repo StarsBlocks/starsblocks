@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { connectToDatabase } from '@/lib/mongodb'
-import { WasteRecord } from '@/lib/types'
+import { Transaction } from '@/lib/types'
 
-// PATCH /api/waste/[id] - Actualizar registro (ej: marcar como recolectado)
+// PATCH /api/transactions/[id] - Validar o rechazar transacción
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -11,23 +11,24 @@ export async function PATCH(
   const { db } = await connectToDatabase()
   const body = await request.json()
 
-  const updateData: Partial<WasteRecord> = {}
+  const updateData: Partial<Transaction> = {}
 
-  if (body.status === 'collected') {
-    updateData.status = 'collected'
-    updateData.collectedAt = new Date()
-    if (body.collectorId) updateData.collectorId = new ObjectId(body.collectorId)
+  if (body.status === 'validated') {
+    updateData.status = 'validated'
+    updateData.validatedAt = new Date()
     if (body.txHash) updateData.txHash = body.txHash
+  } else if (body.status === 'rejected') {
+    updateData.status = 'rejected'
   }
 
-  const result = await db.collection<WasteRecord>('waste').findOneAndUpdate(
+  const result = await db.collection<Transaction>('transactions').findOneAndUpdate(
     { _id: new ObjectId(params.id) },
     { $set: updateData },
     { returnDocument: 'after' }
   )
 
   if (!result) {
-    return NextResponse.json({ error: 'Registro no encontrado' }, { status: 404 })
+    return NextResponse.json({ error: 'Transacción no encontrada' }, { status: 404 })
   }
 
   return NextResponse.json(result)

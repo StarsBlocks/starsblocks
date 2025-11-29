@@ -16,8 +16,9 @@ export async function POST(request: NextRequest) {
 
   const user: User = {
     wallet: body.wallet,
-    role: body.role || 'user',
+    email: body.email,
     name: body.name,
+    role: body.role || 'user',
     createdAt: new Date(),
   }
 
