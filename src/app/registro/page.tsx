@@ -116,6 +116,9 @@ export default function RegistroPage() {
         <p className="auth-link">
           ¿Ya tienes cuenta? <Link href="/login">Inicia sesión</Link>
         </p>
+        <p style={styles.link}>
+          ¿Eres recolector? <Link href="/registro/collector">Regístrate aquí</Link>
+        </p>
       </div>
     </main>
   )

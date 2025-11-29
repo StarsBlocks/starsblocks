@@ -2,7 +2,7 @@ import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { connectToDatabase } from './mongodb'
-import { User } from './types'
+import { User, Collector } from './types'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -17,9 +17,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         const { db } = await connectToDatabase()
-        const user = await db.collection<User>('users').findOne({
+
+        // Buscar primero en users
+        let user = await db.collection<User>('users').findOne({
           email: credentials.email as string,
         })
+
+        // Si no está en users, buscar en collectors
+        if (!user) {
+          user = await db.collection<Collector>('collectors').findOne({
+            email: credentials.email as string,
+          }) as User | null
+        }
 
         if (!user || !user.password) {
           return null
