@@ -26,6 +26,8 @@ export default function CollectorDashboardPage() {
 
   const [products, setProducts] = useState<ProductType[]>([])
   const [recentTransactions, setRecentTransactions] = useState<RecentTransaction[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
   const [formData, setFormData] = useState({
     userWallet: '',
     productTypeId: '',
@@ -62,7 +64,7 @@ export default function CollectorDashboardPage() {
         const res = await fetch(`/api/transactions?collectorId=${collectorId}`)
         if (res.ok) {
           const data: RecentTransaction[] = await res.json()
-          setRecentTransactions(data.slice(0, 5))
+          setRecentTransactions(data)
         }
       } catch {
         // ignore silently, the message area already covers user feedback
@@ -93,10 +95,11 @@ export default function CollectorDashboardPage() {
       const transaction = await res.json()
       setMessage({
         type: 'success',
-        text: `Registrado: ${transaction.amount}kg de ${transaction.productName} para ${transaction.userName}. Puntos: ${transaction.pointsEarned}`
+        text: `Registrado: ${transaction.amount}kg de ${transaction.productName} para ${transaction.userName}. Puntos: ${(transaction.pointsEarned ?? 0).toFixed(2)}`
       })
       setFormData({ userWallet: '', productTypeId: '', amount: '' })
-      setRecentTransactions(prev => [transaction, ...prev].slice(0, 5))
+      setRecentTransactions(prev => [transaction, ...prev])
+      setCurrentPage(1)
     } else {
       const error = await res.json()
       setMessage({ type: 'error', text: error.error || 'Error al registrar' })
@@ -182,7 +185,7 @@ export default function CollectorDashboardPage() {
                   <option value="">Seleccionar...</option>
                   {products.map((p) => (
                     <option key={p._id} value={p._id}>
-                      {p.name} ({p.pointsPerKg} pts/kg)
+                      {p.name}
                     </option>
                   ))}
                 </select>
@@ -229,45 +232,74 @@ export default function CollectorDashboardPage() {
           {recentTransactions.length === 0 ? (
             <p>No hay recolecciones recientes</p>
           ) : (
-            <table className="transactions-table" aria-live="polite" aria-label="Recolecciones recientes">
-              <thead>
-                <tr>
-                  <th>Usuario</th>
-                  <th>Material</th>
-                  <th>Cantidad</th>
-                  <th>Puntos</th>
-                  <th>Blockchain</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentTransactions.map((t) => (
-                  <tr key={t._id}>
-                    <td>{t.userName}</td>
-                    <td>{t.productName}</td>
-                    <td>{t.amount} kg</td>
-                    <td>
-                      <span className="status-badge status-badge--confirmed">
-                        +{t.pointsEarned}
-                      </span>
-                    </td>
-                    <td>
-                      {t.txHash ? (
-                        <a
-                          href={`https://whatsonchain.com/tx/${t.txHash}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="tx-link"
-                        >
-                          Ver TX
-                        </a>
-                      ) : (
-                        '-'
-                      )}
-                    </td>
+            <>
+              <table className="transactions-table" aria-live="polite" aria-label="Recolecciones recientes">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Material</th>
+                    <th>Cantidad</th>
+                    <th>Puntos</th>
+                    <th>Blockchain</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {recentTransactions
+                    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                    .map((t) => (
+                      <tr key={t._id}>
+                        <td>{new Date(t.createdAt).toLocaleString()}</td>
+                        <td>{t.userName}</td>
+                        <td>{t.productName}</td>
+                        <td>{t.amount} kg</td>
+                        <td>
+                          <span className="status-badge status-badge--confirmed">
+                            +{(t.pointsEarned ?? 0).toFixed(2)}
+                          </span>
+                        </td>
+                        <td>
+                          {t.txHash ? (
+                            <a
+                              href={`https://whatsonchain.com/tx/${t.txHash}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="tx-link"
+                            >
+                              Ver TX
+                            </a>
+                          ) : (
+                            '-'
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+              {recentTransactions.length > itemsPerPage && (
+                <div className="pagination">
+                  <button
+                    type="button"
+                    className="pagination-btn"
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    Anterior
+                  </button>
+                  <span className="pagination-info">
+                    Página {currentPage} de {Math.ceil(recentTransactions.length / itemsPerPage)}
+                  </span>
+                  <button
+                    type="button"
+                    className="pagination-btn"
+                    onClick={() => setCurrentPage(p => Math.min(Math.ceil(recentTransactions.length / itemsPerPage), p + 1))}
+                    disabled={currentPage >= Math.ceil(recentTransactions.length / itemsPerPage)}
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </section>
       </div>
