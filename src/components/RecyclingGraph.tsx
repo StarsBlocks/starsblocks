@@ -103,27 +103,6 @@ export function RecyclingGraph({
     return transactions.reduce((sum, tx) => sum + tx.amount, 0)
   }, [transactions])
 
-  const timeframe = useMemo(() => {
-    if (!transactions.length) return null
-    const sorted = [...transactions].sort(
-      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    )
-    const startDate = new Date(sorted[0].createdAt)
-    const endDate = new Date(sorted[sorted.length - 1].createdAt)
-    const format = (date: Date) =>
-      date.toLocaleDateString('es-ES', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
-    return {
-      start: format(startDate),
-      end: format(endDate),
-      startISO: startDate.toISOString(),
-      endISO: endDate.toISOString(),
-    }
-  }, [transactions])
-
   const timelineEntries = useMemo(() => {
     if (!transactions.length) return []
     return [...transactions]
@@ -173,13 +152,6 @@ export function RecyclingGraph({
           <strong>{totalKg.toFixed(1)} kg</strong>
         </div>
       </header>
-      {timeframe && (
-        <p className="recycling-graph__timeframe">
-          {isCollector ? 'Período consolidado' : 'Período medido'}:{' '}
-          <time dateTime={timeframe.startISO}>{timeframe.start}</time> –{' '}
-          <time dateTime={timeframe.endISO}>{timeframe.end}</time>
-        </p>
-      )}
 
       {loading && (
         <div className="recycling-graph__loading">
@@ -324,7 +296,9 @@ export function RecyclingGraph({
                             style={{ background: entry.category.colorVar }}
                           />
                         ))}
-                        {overflow > 0 && <span className="recycling-graph__cube-more">+{overflow} kg</span>}
+                        {overflow > 0 && (
+                          <span className="recycling-graph__cube-more">{overflow} bloques</span>
+                        )}
                       </div>
                     </article>
                   )

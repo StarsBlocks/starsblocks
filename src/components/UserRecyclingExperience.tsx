@@ -1,7 +1,6 @@
 'use client'
 
 import { useMemo } from 'react'
-import { RecyclingGraph } from '@/components/RecyclingGraph'
 import { StarBlocksGame } from '@/components/StarBlocksGame'
 import { PointsTracker } from '@/components/PointsTracker'
 import { matchStarCategory, StarCategoryKey } from '@/lib/constants/starCategories'
@@ -52,7 +51,6 @@ export function UserRecyclingExperience({ userId }: UserRecyclingExperienceProps
 
       <PointsTracker categoryTotals={categoryTotals} totalPoints={totalPoints} lastEntry={lastEntry} />
 
-      <RecyclingGraph role="user" userId={userId} prefetchedData={data} />
     </>
   )
 }
