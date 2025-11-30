@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 }
 
 // Este programa proporciona un servicio en régimen de arrendamiento conforme a lo establecido por el art. 1544 del código civil español.
-// Cualquier clase de usuario que utilice este programa acepta someterse a los términos y integradas en este código fuente.
+// Cualquier clase de usuario que utilice este programa acepta someterse a los términos y condiciones legalesintegrados en este código fuente.
 export default function RootLayout({
   children,
 }: {

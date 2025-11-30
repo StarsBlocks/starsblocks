@@ -40,7 +40,7 @@ Esta evolución convertirá a StarBlocks en el **sistema operativo del reciclaje
 │  ┌──────────────────────────────────────────────────────────────┐  │
 │  │ Pages & Layout                                               │  │
 │  │  - Landing (marketing, CTA, inline footer)                   │  │
-│  │  - Dashboard usuario (StarBlocksGame, PointsTracker)          │  │
+│  │  - Dashboard usuario (StarBlocksGame, PointsTracker)         │  │
 │  │  - Dashboard recolector (registro, tabla, leaderboard CTA)   │  │
 │  │  - Leaderboard (agregaciones geográficas por material)       │  │
 │  │  - Formularios (login, registro, registro recolector)        │  │
@@ -49,34 +49,34 @@ Esta evolución convertirá a StarBlocks en el **sistema operativo del reciclaje
 │                      ▼                                             │
 │  Componentes UI reutilizables                                      │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ - AuthNav, SiteFooter, GlobalFooter                           │  │
-│  │ - StarBlocksGame, PointsTracker, RecyclingGraph               │  │
-│  │ - CustomSelect, UserRecyclingExperience                       │  │
-│  │ - Context Providers, skip-link, estilos globales              │  │
+│  │ - AuthNav, SiteFooter, GlobalFooter                          │  │
+│  │ - StarBlocksGame, PointsTracker, RecyclingGraph              │  │
+│  │ - CustomSelect, UserRecyclingExperience                      │  │
+│  │ - Context Providers, skip-link, estilos globales             │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 │                                                                    │
 │  API Routes (Next.js)                                              │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ - /api/users, /api/collectors, /api/products                  │  │
-│  │ - /api/transactions (GET/POST, integra blockchain)            │  │
-│  │ - /api/leaderboard (aggregations con MongoDB)                 │  │
+│  │ - /api/users, /api/collectors, /api/products                 │  │
+│  │ - /api/transactions (GET/POST, integra blockchain)           │  │
+│  │ - /api/leaderboard (aggregations con MongoDB)                │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 │                      │                                             │
 │                      ▼                                             │
 │  Servicios internos                                                │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ - MongoDB Atlas (colecciones: users, collectors,               │ │
-│  │   productTypes, transactions)                                  │ │
-│  │ - `lib/mongodb` (conexión y helper)                            │ │
-│  │ - `lib/blockchain` (registro OP_RETURN y wallet BSV)           │ │
-│  │ - NextAuth (sesiones user/collector)                           │ │
+│  │ - MongoDB Atlas (colecciones: users, collectors,             │  │
+│  │   productTypes, transactions)                                │  │
+│  │ - `lib/mongodb` (conexión y helper)                          │  │
+│  │ - `lib/blockchain` (registro OP_RETURN y wallet BSV)         │  │
+│  │ - NextAuth (sesiones user/collector)                         │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 │                                                                    │
 │  Integraciones externas                                            │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ - Blockchain BSV (escritura de tx y verificación futura)       │ │
-│  │ - Wallet service (firmas y addresses)                          │ │
-│  │ - MongoDB Atlas cluster                                        │ │
+│  │ - Blockchain BSV (escritura de tx y verificación futura)     │  │
+│  │ - Wallet service (firmas y addresses)                        │  │
+│  │ - MongoDB Atlas cluster                                      │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 └────────────────────────────────────────────────────────────────────┘
 ```
