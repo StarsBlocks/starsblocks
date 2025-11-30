@@ -6,6 +6,8 @@
 
 StarBlocks es una plataforma web construida con Next.js 13, TypeScript y estilos custom (globals + variables) que conecta a recicladores urbanos con recolectores y registra cada entrega sobre la blockchain de BSV para garantizar trazabilidad y recompensas transparentes.
 
+La identificación para la entrega de reciclaje se realiza mediante el uso de una llave NFC, que será entregada, una vez completado el registro, por el funcionario del ayuntamiento encargado del punto de recolección más cercano a su domicilio. Este registro puede realizarse online o presencialmente en el mismo punto de reciclaje. Así, cada entrega queda registrada en la blockchain, garantizando trazabilidad y recompensas transparentes para los usuarios.
+
 ## Stack técnico
 
 - **Frontend**: Next.js 13 App Router, Server Components + Client Components según necesidad, CSS modularizado en `globals.css`.
@@ -72,7 +74,7 @@ StarBlocks es una plataforma web construida con Next.js 13, TypeScript y estilos
 - **Dashboard usuario**: Nave con header, panel de credenciales, wallet copy, sección de estadísticas (StarBlocksGame, PointsTracker), timeline de bloques y accesos a datos sensibles mediante un panel que actúa como modal.
 - **Dashboard recolector**: Header distintivo, formulario para registrar recolecciones (con validaciones, selects dependientes), tabla en vivo de transacciones y llamado a un leaderboard de ubicaciones.
 - **Leaderboard**: Página dedicada accesible desde el CTA para recolectores. Consulta `/api/leaderboard` y muestra rankings segmentados por material con gradientes y tarjetas responsive.
-**Accesibilidad (WCAG 2.2)**: Cumple con los principales criterios de WCAG 2.2, incluyendo:
+- **Accesibilidad (WCAG 2.2)**: Cumple con los principales criterios de WCAG 2.2, incluyendo:
   - Navegación completa por teclado (skip-link, focus visible, gestión de tabulación).
   - Roles y atributos ARIA en formularios, paneles y animaciones (`aria-live`, `role="alert"`, `aria-label`).
   - Contraste de colores AA en textos y botones, con variables CSS para ajustes.
