@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx tsx:*)"
+      "Bash(npx tsx:*)",
+      "Bash(npx docx-extractor:*)",
+      "Bash(powershell -Command \"[System.IO.Compression.ZipFile]::OpenRead(''StarBlocks_Aviso_Legal.docx'').Entries | Where-Object { $_Name -eq ''document.xml'' } | ForEach-Object { $stream = $_Open(); $reader = New-Object System.IO.StreamReader($stream); $content = $reader.ReadToEnd(); $reader.Close(); $content -replace ''<[^>]+>'', '' '' -replace ''\\s+'', '' '' }\")"
     ],
     "deny": [],
     "ask": []

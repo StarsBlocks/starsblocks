@@ -16,6 +16,7 @@ interface UserData {
 interface Transaction {
   _id: string
   productTypeId: string
+  productName?: string
   amount: number
   pointsEarned: number
   txHash?: string
@@ -161,6 +162,20 @@ export default function DashboardPage() {
       </header>
 
       <div className="dashboard-content">
+        <section className="dashboard-section leaderboard-callout">
+          <div>
+            <h3>Ranking de ubicaciones</h3>
+            <p>Consulta el leaderboard con las comunidades que más reciclan.</p>
+          </div>
+          <button
+            type="button"
+            className="leaderboard-button"
+            onClick={() => router.push('/leaderboard')}
+          >
+            Ver leaderboard
+          </button>
+        </section>
+
         <section className="dashboard-section" aria-live="polite">
           <div className="credentials-header">
             <div>
@@ -269,7 +284,7 @@ export default function DashboardPage() {
 
         <section className="stats-grid">
           <div className="stat-card">
-            <h3>{userData.totalKg || 0} kg</h3>
+            <h3>{(userData.totalKg ?? 0).toFixed(1)} kg</h3>
             <p>Total reciclado</p>
           </div>
           <div className="stat-card">
@@ -284,20 +299,6 @@ export default function DashboardPage() {
 
         <UserRecyclingExperience userId={session.user?.id} />
 
-        <section className="dashboard-section leaderboard-callout">
-          <div>
-            <h3>Ranking de ubicaciones</h3>
-            <p>Consulta el leaderboard con las comunidades que más reciclan.</p>
-          </div>
-          <button
-            type="button"
-            className="leaderboard-button"
-            onClick={() => router.push('/leaderboard')}
-          >
-            Ver leaderboard
-          </button>
-        </section>
-
         <section className="dashboard-section">
           <h3>Historial de reciclaje</h3>
           {transactions.length === 0 ? (
@@ -307,6 +308,7 @@ export default function DashboardPage() {
               <thead>
                 <tr>
                   <th>Fecha</th>
+                  <th>Material</th>
                   <th>Cantidad</th>
                   <th>Puntos</th>
                   <th>Blockchain</th>
@@ -316,10 +318,11 @@ export default function DashboardPage() {
                 {transactions.map((t) => (
                   <tr key={t._id}>
                     <td>{new Date(t.createdAt).toLocaleString()}</td>
+                    <td>{t.productName || '-'}</td>
                     <td>{t.amount} kg</td>
                     <td>
                       <span className="status-badge status-badge--confirmed">
-                        +{t.pointsEarned}
+                        +{(t.pointsEarned ?? 0).toFixed(2)}
                       </span>
                     </td>
                     <td>
