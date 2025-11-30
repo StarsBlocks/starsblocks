@@ -10,6 +10,11 @@ export function middleware(request: NextRequest) {
       return NextResponse.next()
     }
 
+    // Allow Public API routes for developers
+    if (request.nextUrl.pathname.startsWith('/api/public/')) {
+      return NextResponse.next()
+    }
+
     // Check for internal access using Origin or Referer
     const origin = request.headers.get('origin')
     const referer = request.headers.get('referer')
