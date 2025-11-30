@@ -670,6 +670,7 @@ a {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .stat-card {
@@ -690,9 +691,134 @@ a {
 }
 
 .stat-card p {
-  margin: 0.25rem 0 0;
+  margin: 0.6rem 0 0;
   font-size: 0.9rem;
   color: rgba(248, 250, 252, 0.65);
+}
+
+.credentials-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.settings-button {
+  border: 1px solid rgba(248, 250, 252, 0.35);
+  background: rgba(15, 23, 42, 0.8);
+  color: rgba(248, 250, 252, 0.85);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: border 200ms ease, transform 200ms ease;
+}
+
+.settings-button:hover {
+  border-color: var(--color-secondary);
+  transform: rotate(10deg);
+}
+
+.settings-panel {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(6, 11, 42, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.settings-panel__warning {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(250, 204, 21, 0.85);
+}
+
+.settings-panel__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.settings-panel__form label {
+  font-size: 0.85rem;
+  color: rgba(248, 250, 252, 0.8);
+}
+
+.settings-panel__form input {
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.85);
+  color: #f8fafc;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.95rem;
+}
+
+.settings-panel__form input:focus {
+  border-color: var(--color-secondary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+}
+
+.settings-panel__error {
+  margin: 0;
+  color: rgba(248, 113, 113, 0.9);
+  font-size: 0.85rem;
+}
+
+.settings-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.settings-panel__actions button {
+  border: none;
+  border-radius: 12px;
+  padding: 0.65rem 1.25rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.settings-panel__actions button[type='submit'] {
+  background: linear-gradient(120deg, var(--color-primary), var(--color-secondary));
+  color: #030712;
+}
+
+.settings-panel__close {
+  background: transparent;
+  border: 1px solid rgba(248, 250, 252, 0.35);
+  color: rgba(248, 250, 252, 0.85);
+}
+
+.settings-panel__key {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+}
+
+.settings-panel__key code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  word-break: break-all;
+  color: var(--color-primary);
+}
+
+.settings-panel__key button {
+  align-self: flex-start;
+  border: none;
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  font-weight: 600;
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--color-primary);
+  cursor: pointer;
 }
 
 /* Star blocks game */
@@ -715,6 +841,15 @@ a {
   text-align: right;
   font-size: 0.85rem;
   color: rgba(248, 250, 252, 0.75);
+}
+
+.star-game__progress span,
+.star-game__progress small {
+  display: block;
+}
+
+.star-game__progress small {
+  margin-top: 0.1rem;
 }
 
 .star-game__progress-bar {
