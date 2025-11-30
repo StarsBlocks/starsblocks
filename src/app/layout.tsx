@@ -23,8 +23,13 @@ export default function RootLayout({
     <html lang="es">
       <body>
         <Providers>
+          <a className="skip-link" href="#main-content">
+            Saltar al contenido principal
+          </a>
           <div className="app-shell">
-            <div className="app-shell__content">{children}</div>
+            <div className="app-shell__content" id="main-content" tabIndex={-1}>
+              {children}
+            </div>
             <GlobalFooter />
           </div>
         </Providers>

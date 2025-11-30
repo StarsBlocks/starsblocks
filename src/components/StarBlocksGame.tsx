@@ -64,6 +64,8 @@ export function StarBlocksGame({ categoryTotals, totalPoints, loading, error }: 
                   className={`star-block star-block--${category.key} ${
                     category.active ? 'star-block--active' : 'star-block--inactive'
                   }`}
+                  aria-label={`${category.label}: ${category.blocks} bloques`}
+                  role="img"
                   style={{ animationDelay: `${category.delay}s` }}
                 />
               ))}
@@ -71,7 +73,7 @@ export function StarBlocksGame({ categoryTotals, totalPoints, loading, error }: 
             <p className="star-progress__note">En el futuro te verás recompensado.</p>
           </div>
 
-          <ul className="star-progress__legend">
+          <ul className="star-progress__legend" aria-label="Bloques por categoría">
             {categoryState.map((category) => (
               <li key={category.key}>
                 <span style={{ background: category.colorVar }} />

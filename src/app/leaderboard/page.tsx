@@ -71,11 +71,11 @@ export default function LeaderboardPage() {
   return (
     <>
       <AuthNav />
-      <main className="leaderboard-shell">
-        <section className="leaderboard-hero">
+      <main className="leaderboard-shell" aria-live="polite">
+        <section className="leaderboard-hero" aria-labelledby="leaderboard-title">
           <div>
             <p className="leaderboard-hero__eyebrow">Leaderboard</p>
-            <h1>Ubicaciones más activas por material</h1>
+            <h1 id="leaderboard-title">Ubicaciones más activas por material</h1>
             <p>
               Explorá qué ayuntamientos y comunidades lideran el reciclaje para cada categoría. Los datos se actualizan
               con cada recolección validada.
@@ -84,25 +84,25 @@ export default function LeaderboardPage() {
         </section>
 
         {loading && (
-          <section className="dashboard-section">
+          <section className="dashboard-section" role="status" aria-live="assertive">
             <p>Cargando leaderboard...</p>
           </section>
         )}
 
         {error && !loading && (
-          <section className="dashboard-section">
-            <p className="auth-error">{error}</p>
+          <section className="dashboard-section" role="alert">
+            <p className="auth-error" aria-live="assertive">{error}</p>
           </section>
         )}
 
         {!loading && !error && (
-          <section className="leaderboard-grid">
+          <section className="leaderboard-grid" aria-label="Ranking por categoría">
             {categories.map((category) => (
-              <article key={category.key} className="leaderboard-card">
+              <article key={category.key} className="leaderboard-card" aria-labelledby={`${category.key}-title`}>
                 <header style={{ borderColor: category.color }}>
                   <div>
                     <span style={{ background: category.color }} />
-                    <h2>{category.label}</h2>
+                    <h2 id={`${category.key}-title`}>{category.label}</h2>
                   </div>
                   <p>{category.locations.length ? 'Top ubicaciones' : 'Sin registros'}</p>
                 </header>
@@ -111,8 +111,8 @@ export default function LeaderboardPage() {
                 ) : (
                   <ol>
                     {category.locations.map((location, index) => (
-                      <li key={`${category.key}-${locationLabel(location)}-${index}`}>
-                        <span className="leaderboard-position">#{index + 1}</span>
+                      <li key={`${category.key}-${locationLabel(location)}-${index}`} aria-label={`Posición ${index + 1}`}>
+                        <span className="leaderboard-position" aria-hidden="true">#{index + 1}</span>
                         <div>
                           <p>{locationLabel(location)}</p>
                           {locationMeta(location) && <small>{locationMeta(location)}</small>}
