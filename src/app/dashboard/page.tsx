@@ -3,11 +3,12 @@
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { UserRecyclingExperience } from '@/components/UserRecyclingExperience'
 
 interface UserData {
   wallet?: string
   totalKg?: number
-  totalTokens?: number
+  totalPoints?: number
   totalTransactions?: number
 }
 
@@ -15,7 +16,7 @@ interface Transaction {
   _id: string
   productTypeId: string
   amount: number
-  tokensEarned: number
+  pointsEarned: number
   txHash?: string
   createdAt: string
 }
@@ -26,6 +27,12 @@ export default function DashboardPage() {
   const [userData, setUserData] = useState<UserData>({})
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [copied, setCopied] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [settingsPassword, setSettingsPassword] = useState('')
+  const [settingsError, setSettingsError] = useState('')
+  const [settingsLoading, setSettingsLoading] = useState(false)
+  const [privateKey, setPrivateKey] = useState<string | null>(null)
+  const [privateKeyCopied, setPrivateKeyCopied] = useState(false)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -67,6 +74,51 @@ export default function DashboardPage() {
     }
   }
 
+  function toggleSettings() {
+    const next = !settingsOpen
+    setSettingsPassword('')
+    setSettingsError('')
+    setPrivateKey(null)
+    setPrivateKeyCopied(false)
+    setSettingsOpen(next)
+  }
+
+  async function handlePrivateKeyRequest(e: React.FormEvent) {
+    e.preventDefault()
+    if (!session?.user?.id || !settingsPassword) {
+      setSettingsError('Debes ingresar tu contraseña')
+      return
+    }
+
+    setSettingsLoading(true)
+    setSettingsError('')
+    setPrivateKey(null)
+
+    const res = await fetch(`/api/users/${session.user.id}/private-key`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: settingsPassword })
+    })
+
+    setSettingsLoading(false)
+
+    if (res.ok) {
+      const data = await res.json()
+      setPrivateKey(data.privateKey)
+    } else {
+      const error = await res.json()
+      setSettingsError(error.error || 'No se pudo obtener la llave privada')
+    }
+  }
+
+  function copyPrivateKey() {
+    if (privateKey) {
+      navigator.clipboard.writeText(privateKey)
+      setPrivateKeyCopied(true)
+      setTimeout(() => setPrivateKeyCopied(false), 2000)
+    }
+  }
+
   if (status === 'loading') {
     return (
       <main className="loading-shell">
@@ -82,7 +134,7 @@ export default function DashboardPage() {
   return (
     <main className="dashboard-shell">
       <header className="dashboard-header">
-        <h1 className="dashboard-logo">StarsBlocks</h1>
+        <h1 className="dashboard-logo">StarBlocks</h1>
         <div className="dashboard-user">
           <span>{session.user?.name}</span>
           <button onClick={() => signOut()} className="dashboard-logout">
@@ -93,12 +145,68 @@ export default function DashboardPage() {
 
       <div className="dashboard-content">
         <section className="dashboard-section">
-          <h2>Bienvenido, {session.user?.name}</h2>
-          <p>Email: {session.user?.email}</p>
+          <div className="credentials-header">
+            <div>
+              <h2>Bienvenido, {session.user?.name}</h2>
+              <p>Email: {session.user?.email}</p>
+            </div>
+            <button
+              type="button"
+              className="settings-button"
+              onClick={toggleSettings}
+              aria-expanded={settingsOpen}
+              aria-label="Configuración de seguridad"
+            >
+              ⚙️
+            </button>
+          </div>
+
+          {settingsOpen && (
+            <div className="settings-panel">
+              <h3>Llave privada para apps BSV</h3>
+              <p className="settings-panel__warning">
+                ⚠️ Guarda esta llave en un lugar seguro. Podrás usarla en otras aplicaciones BSV,
+                pero perderla significa perder acceso a tus tokens.
+              </p>
+
+              <form onSubmit={handlePrivateKeyRequest} className="settings-panel__form">
+                <label htmlFor="settings-password">Confirma tu contraseña</label>
+                <input
+                  id="settings-password"
+                  type="password"
+                  value={settingsPassword}
+                  onChange={(e) => setSettingsPassword(e.target.value)}
+                  placeholder="••••••••"
+                />
+                {settingsError && <p className="settings-panel__error">{settingsError}</p>}
+                <div className="settings-panel__actions">
+                  <button type="submit" disabled={settingsLoading}>
+                    {settingsLoading ? 'Descifrando…' : 'Mostrar llave privada'}
+                  </button>
+                  <button
+                    type="button"
+                    className="settings-panel__close"
+                    onClick={toggleSettings}
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </form>
+
+              {privateKey && (
+                <div className="settings-panel__key">
+                  <code>{privateKey}</code>
+                  <button type="button" onClick={copyPrivateKey}>
+                    {privateKeyCopied ? '¡Copiada!' : 'Copiar llave'}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </section>
 
         <section className="dashboard-section">
-          <h3>Tu Wallet (ID para reciclaje)</h3>
+          <h3>Tu ID para reciclaje</h3>
           <p>Muestra este código al recolector para registrar tu reciclaje</p>
           <div className="wallet-box">
             <code className="wallet-code">
@@ -116,14 +224,16 @@ export default function DashboardPage() {
             <p>Total reciclado</p>
           </div>
           <div className="stat-card">
-            <h3>{userData.totalTokens || 0}</h3>
-            <p>Tokens ganados</p>
+            <h3>{userData.totalPoints || 0}</h3>
+            <p>Puntos ganados</p>
           </div>
           <div className="stat-card">
             <h3>{userData.totalTransactions || 0}</h3>
             <p>Transacciones</p>
           </div>
         </section>
+
+        <UserRecyclingExperience userId={session.user?.id} />
 
         <section className="dashboard-section">
           <h3>Historial de reciclaje</h3>
@@ -135,7 +245,7 @@ export default function DashboardPage() {
                 <tr>
                   <th>Fecha</th>
                   <th>Cantidad</th>
-                  <th>Tokens</th>
+                  <th>Puntos</th>
                   <th>Blockchain</th>
                 </tr>
               </thead>
@@ -146,7 +256,7 @@ export default function DashboardPage() {
                     <td>{t.amount} kg</td>
                     <td>
                       <span className="status-badge status-badge--confirmed">
-                        +{t.tokensEarned}
+                        +{t.pointsEarned}
                       </span>
                     </td>
                     <td>

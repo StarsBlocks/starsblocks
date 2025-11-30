@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Usuario no encontrado con esa wallet' }, { status: 404 })
   }
 
-  // Obtener el tipo de producto para calcular tokens
+  // Obtener el tipo de producto para calcular puntos
   const productType = await db.collection<ProductType>('productTypes').findOne({
     _id: new ObjectId(body.productTypeId)
   })
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Tipo de producto no encontrado' }, { status: 404 })
   }
 
-  const tokensEarned = body.amount * productType.tokensPerKg
+  const pointsEarned = body.amount * productType.pointsPerKg
 
   // Registrar en blockchain
   const txHash = await registerWasteOnChain({
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     collector_id: body.collectorId,
     product_type: productType.name,
     amount: body.amount,
-    points: tokensEarned
+    points: pointsEarned
   })
 
   const transaction: Transaction = {
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     collectorId: new ObjectId(body.collectorId),
     productTypeId: new ObjectId(body.productTypeId),
     amount: body.amount,
-    tokensEarned,
+    pointsEarned,
     status: 'validated',
     txHash,
     createdAt: new Date(),

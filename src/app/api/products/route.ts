@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   const product: ProductType = {
     name: body.name,
     pricePerKg: body.pricePerKg,
-    tokensPerKg: body.tokensPerKg,
+    pointsPerKg: body.pointsPerKg,
     createdAt: new Date(),
   }
 

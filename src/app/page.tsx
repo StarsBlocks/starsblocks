@@ -1,32 +1,5 @@
 import Link from 'next/link'
-
-const starCategories = [
-  {
-    key: 'vidrio',
-    label: 'Vidrio',
-    description: 'Botellas y frascos transparentes se codifican en verde neón para un seguimiento impecable.',
-  },
-  {
-    key: 'papel',
-    label: 'Papel',
-    description: 'Cartón y fibras se vuelven bloques celestes para monitorear fardos limpios.',
-  },
-  {
-    key: 'metal',
-    label: 'Metal',
-    description: 'Latas y chatarra ligera inspiran destellos dorados de alto valor.',
-  },
-  {
-    key: 'aceite',
-    label: 'Aceite',
-    description: 'Residuos aceitosos brillan en naranja ámbar para activar protocolos de recuperación segura.',
-  },
-  {
-    key: 'envases',
-    label: 'Envases',
-    description: 'Plásticos multicolor forman el punto violeta para medir el flujo hacia nuevos productos.',
-  },
-]
+import { starCategories } from '@/lib/constants/starCategories'
 
 export default function Home() {
   return (
@@ -43,9 +16,8 @@ export default function Home() {
           <h1 className="home-title">Convierte tu reciclaje en una partida infinita.</h1>
 
           <p className="home-lead">
-            StarsBlocks es un juego urbano donde cada botella, lata o tetrabrik se transforma en un
-            bloque digital. Documenta tu impacto en blockchain, acumula tokens verdes y reta a tu
-            comunidad por el primer puesto del tablero.
+            StarBlocks es un juego urbano donde cada residuo se transforma en un bloque digital.
+            Documenta tu impacto, acumula puntos y reta a tu comunidad por el primer puesto del tablero.
           </p>
 
           <div className="home-cta">
@@ -58,8 +30,8 @@ export default function Home() {
           </div>
 
           <p className="home-footnote">
-            Cada bloque almacenado valida peso, origen y categoría del residuo. Tus estadísticas se
-            sincronizan en segundos y tu progreso nunca se pierde.
+            Cada bloque almacenado valida peso, origen y categoría del residuo. Tus estadísticas se sincronizan en
+            segundos y tu progreso nunca se pierde.
           </p>
         </div>
 
@@ -68,8 +40,8 @@ export default function Home() {
             <header className="star-lab__head">
               <h2>Así se arma la estrella de residuos.</h2>
               <p>
-                Observa cómo los bloques de cada material viajan desde el centro y completan los cinco
-                puntos de la estrella. Es la misma secuencia que usa la app para validar categorías.
+                Observa cómo los bloques de cada material viajan desde el centro y completan los cinco puntos de la
+                estrella. Es la misma secuencia que usa la app para validar categorías.
               </p>
             </header>
 
@@ -91,10 +63,7 @@ export default function Home() {
             <ul className="star-legend">
               {starCategories.map((category) => (
                 <li key={category.key}>
-                  <span
-                    className="legend-swatch"
-                    style={{ backgroundColor: `var(--block-${category.key})` }}
-                  />
+                  <span className="legend-swatch" style={{ backgroundColor: `var(--block-${category.key})` }} />
                   <div>
                     <p className="legend-label">{category.label}</p>
                     <p className="legend-description">{category.description}</p>
@@ -103,8 +72,6 @@ export default function Home() {
               ))}
             </ul>
           </section>
-
-
         </div>
       </section>
     </main>

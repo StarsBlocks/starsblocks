@@ -25,7 +25,7 @@ export interface Collector {
   zone: string              // zona de recolección
   vehicle?: string          // vehículo asignado (placa)
   license?: string          // licencia/permisos
-  wallet?: string           // se añade después con blockchain
+  wallet?: string           // se añade cuando se integre blockchain
   createdAt: Date
 }
 
@@ -34,7 +34,7 @@ export interface ProductType {
   _id?: ObjectId
   name: string           // plástico, vidrio, cartón...
   pricePerKg: number     // precio por kg
-  tokensPerKg: number    // tokens que da por kg
+  pointsPerKg: number    // puntos que da por kg
   createdAt: Date
 }
 
@@ -45,7 +45,7 @@ export interface Transaction {
   collectorId: ObjectId      // quién recolectó
   productTypeId: ObjectId    // qué material
   amount: number             // cantidad en kg
-  tokensEarned: number       // tokens ganados
+  pointsEarned: number       // puntos ganados
   status: 'pending' | 'validated' | 'rejected'
   txHash?: string            // hash blockchain (cuando se valide)
   createdAt: Date

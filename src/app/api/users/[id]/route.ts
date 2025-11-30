@@ -42,13 +42,13 @@ export async function GET(
     .toArray()
 
   const totalKg = transactions.reduce((sum, t) => sum + t.amount, 0)
-  const totalTokens = transactions.reduce((sum, t) => sum + t.tokensEarned, 0)
+  const totalPoints = transactions.reduce((sum, t) => sum + t.pointsEarned, 0)
   const totalTransactions = transactions.length
 
   return NextResponse.json({
     wallet,
     totalKg,
-    totalTokens,
+    totalPoints,
     totalTransactions,
   })
 }

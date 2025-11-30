@@ -3,8 +3,14 @@ import './globals.css'
 import { Providers } from './providers'
 
 export const metadata: Metadata = {
-  title: 'StarsBlocks',
-  description: 'Registro de basura en blockchain',
+  title: 'StarBlocks',
+  description: 'Convierte tu reciclaje en bloques digitales y compite por el primer puesto.',
+  icons: {
+    icon: '/favicon.ico',
+  },
+  openGraph: {
+    images: ['/logo.jpg'],
+  },
 }
 
 export default function RootLayout({

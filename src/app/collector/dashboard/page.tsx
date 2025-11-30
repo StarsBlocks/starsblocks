@@ -3,11 +3,12 @@
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { RecyclingGraph } from '@/components/RecyclingGraph'
 
 interface ProductType {
   _id: string
   name: string
-  tokensPerKg: number
+  pointsPerKg: number
 }
 
 interface RecentTransaction {
@@ -15,7 +16,7 @@ interface RecentTransaction {
   userName: string
   productName: string
   amount: number
-  tokensEarned: number
+  pointsEarned: number
   txHash?: string
   createdAt: string
 }
@@ -76,7 +77,7 @@ export default function CollectorDashboardPage() {
       const transaction = await res.json()
       setMessage({
         type: 'success',
-        text: `Registrado: ${transaction.amount}kg de ${transaction.productName} para ${transaction.userName}. Tokens: ${transaction.tokensEarned}`
+        text: `Registrado: ${transaction.amount}kg de ${transaction.productName} para ${transaction.userName}. Puntos: ${transaction.pointsEarned}`
       })
       setFormData({ userWallet: '', productTypeId: '', amount: '' })
       setRecentTransactions(prev => [transaction, ...prev].slice(0, 5))
@@ -158,7 +159,7 @@ export default function CollectorDashboardPage() {
                   <option value="">Seleccionar...</option>
                   {products.map((p) => (
                     <option key={p._id} value={p._id}>
-                      {p.name} ({p.tokensPerKg} tokens/kg)
+                      {p.name} ({p.pointsPerKg} pts/kg)
                     </option>
                   ))}
                 </select>
@@ -187,7 +188,7 @@ export default function CollectorDashboardPage() {
             </button>
           </form>
         </section>
-
+        <RecyclingGraph role="collector" collectorId={session.user?.id} />
         <section className="dashboard-section">
           <h3>Recolecciones recientes</h3>
           {recentTransactions.length === 0 ? (
@@ -199,7 +200,7 @@ export default function CollectorDashboardPage() {
                   <th>Usuario</th>
                   <th>Material</th>
                   <th>Cantidad</th>
-                  <th>Tokens</th>
+                  <th>Puntos</th>
                   <th>Blockchain</th>
                 </tr>
               </thead>
@@ -211,7 +212,7 @@ export default function CollectorDashboardPage() {
                     <td>{t.amount} kg</td>
                     <td>
                       <span className="status-badge status-badge--confirmed">
-                        +{t.tokensEarned}
+                        +{t.pointsEarned}
                       </span>
                     </td>
                     <td>
