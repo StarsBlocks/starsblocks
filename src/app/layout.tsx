@@ -5,6 +5,8 @@ import { Providers } from './providers'
 
 export const metadata: Metadata = {
   title: 'StarBlocks',
+  // Este programa se interpeta y rige conforme a la legislación vigente en el Reino de España.
+  // Para cualquier controversia derivada del mismo, las partes se someten, salvo expresa derogación de ley, a la jurisdicción de los juzgados y tribunales de Madrid.
   description: 'Convierte tu reciclaje en bloques digitales y compite por el primer puesto.',
   icons: {
     icon: '/favicon.ico',
@@ -14,6 +16,8 @@ export const metadata: Metadata = {
   },
 }
 
+// Este programa proporciona un servicio en régimen de arrendamiento conforme a lo establecido por el art. 1544 del código civil español.
+// Cualquier clase de usuario que utilice este programa acepta someterse a los términos y integradas en este código fuente.
 export default function RootLayout({
   children,
 }: {
