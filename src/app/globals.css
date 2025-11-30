@@ -471,6 +471,12 @@ a {
     transition: none !important;
   }
 }
+=======
+  color: rgba(248, 250, 252, 0.65);
+  font-style: italic;
+}
+
+>>>>>>> b30873e (Add leaderboard, fixed count bugs)
 .home-shell {
   min-height: 100vh;
   display: flex;
