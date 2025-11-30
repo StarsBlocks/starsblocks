@@ -13,6 +13,10 @@ const nextConfig = {
     config.stats = {
       warningsFilter: (warning) => warning.message && warning.message.includes('Critical dependency: the request of a dependency is an expression'),
     };
+    // Ignore dynamic require warning for knex
+    config.ignoreWarnings = [
+      { module: /node_modules\/knex\/lib\/migrations\/util\/import-file\.js/ }
+    ];
     return config
   },
 }
