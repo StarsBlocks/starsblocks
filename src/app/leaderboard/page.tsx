@@ -114,9 +114,7 @@ export default function LeaderboardPage() {
                   <ol>
                     {category.locations.map((location, index) => (
                       <li key={`${category.key}-${locationLabel(location)}-${index}`} aria-label={`Posición ${index + 1}`}>
-                        <span className="leaderboard-position" aria-hidden="true">
-                          #{index + 1}
-                        </span>
+                        <span className="leaderboard-position" aria-hidden="true">#{index + 1}</span>
                         <div>
                           <p>{locationLabel(location)}</p>
                           {locationMeta(location) && <small>{locationMeta(location)}</small>}
