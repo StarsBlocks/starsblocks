@@ -43,6 +43,9 @@ export async function POST(request: NextRequest) {
     zone: body.zone,
     vehicle: body.vehicle,
     license: body.license,
+    community: body.community,
+    province: body.province,
+    council: body.council,
     createdAt: new Date(),
   }
 

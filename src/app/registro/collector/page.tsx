@@ -3,11 +3,28 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import spainLocations from '@/data/spain-locations.json'
+import CustomSelect from '@/components/CustomSelect'
 
 export default function RegistroCollectorPage() {
   const router = useRouter()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [selectedComunidad, setSelectedComunidad] = useState('')
+  const [selectedProvincia, setSelectedProvincia] = useState('')
+  const [selectedMunicipio, setSelectedMunicipio] = useState('')
+
+  // Opciones para los selects
+  const comunidadOptions = spainLocations.comunidades.map(c => ({
+    value: c.nombre,
+    label: c.nombre
+  }))
+
+  const comunidad = spainLocations.comunidades.find(c => c.nombre === selectedComunidad)
+  const provinciaOptions = comunidad?.provincias.map(p => ({ value: p.nombre, label: p.nombre })) || []
+
+  const provincia = comunidad?.provincias.find(p => p.nombre === selectedProvincia)
+  const municipioOptions = provincia?.municipios.map(m => ({ value: m, label: m })) || []
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -24,6 +41,9 @@ export default function RegistroCollectorPage() {
       zone: formData.get('zone'),
       vehicle: formData.get('vehicle'),
       license: formData.get('license'),
+      community: formData.get('community'),
+      province: formData.get('province'),
+      council: formData.get('council'),
     }
 
     const res = await fetch('/api/collectors', {
@@ -96,6 +116,62 @@ export default function RegistroCollectorPage() {
               required
               placeholder="tu@email.com"
             />
+          </div>
+
+          <div className="auth-field">
+            <label className="auth-label" htmlFor="community">
+              Comunidad Autónoma
+            </label>
+            <CustomSelect
+              id="community"
+              name="community"
+              value={selectedComunidad}
+              onChange={(val) => {
+                setSelectedComunidad(val)
+                setSelectedProvincia('')
+                setSelectedMunicipio('')
+              }}
+              options={comunidadOptions}
+              placeholder="Seleccionar comunidad..."
+              required
+            />
+          </div>
+
+          <div className="auth-row">
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="province">
+                Provincia
+              </label>
+              <CustomSelect
+                id="province"
+                name="province"
+                value={selectedProvincia}
+                onChange={(val) => {
+                  setSelectedProvincia(val)
+                  setSelectedMunicipio('')
+                }}
+                options={provinciaOptions}
+                placeholder="Seleccionar provincia..."
+                disabled={!selectedComunidad}
+                required
+              />
+            </div>
+
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="council">
+                Municipio
+              </label>
+              <CustomSelect
+                id="council"
+                name="council"
+                value={selectedMunicipio}
+                onChange={setSelectedMunicipio}
+                options={municipioOptions}
+                placeholder="Seleccionar municipio..."
+                disabled={!selectedProvincia}
+                required
+              />
+            </div>
           </div>
 
           <div className="auth-field">
