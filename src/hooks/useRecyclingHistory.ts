@@ -20,12 +20,14 @@ interface UseRecyclingHistoryParams {
   userId?: string
   collectorId?: string
   disabled?: boolean
+  refreshKey?: string | number
 }
 
 export function useRecyclingHistory({
   userId,
   collectorId,
   disabled = false,
+  refreshKey,
 }: UseRecyclingHistoryParams): RecyclingHistoryState {
   const [transactions, setTransactions] = useState<RecyclingHistoryTransaction[]>([])
   const [products, setProducts] = useState<Record<string, string>>({})
@@ -78,7 +80,7 @@ export function useRecyclingHistory({
     }
 
     loadData()
-  }, [userId, collectorId, disabled])
+  }, [userId, collectorId, disabled, refreshKey])
 
   return { transactions, products, loading, error }
 }

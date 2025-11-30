@@ -47,12 +47,16 @@ export default function RegistroPage() {
         <div className="auth-panel">
           <div className="auth-heading">
             <h1>Crear cuenta</h1>
-            <p>Únete a la comunidad que convierte residuos en recompensas</p>
+            <p id="register-description">Únete a la comunidad que convierte residuos en recompensas</p>
           </div>
 
-          {error && <p className="auth-error">{error}</p>}
+          {error && (
+            <p className="auth-error" role="alert" aria-live="assertive">
+              {error}
+            </p>
+          )}
 
-          <form className="auth-form" onSubmit={handleSubmit}>
+          <form className="auth-form" onSubmit={handleSubmit} aria-describedby="register-description">
             <div className="auth-field">
               <label className="auth-label" htmlFor="name">
                 Nombre completo

@@ -3,7 +3,6 @@
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { RecyclingGraph } from '@/components/RecyclingGraph'
 
 interface ProductType {
   _id: string
@@ -34,6 +33,7 @@ export default function CollectorDashboardPage() {
   })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState({ type: '', text: '' })
+  const collectorId = session?.user?.id
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -55,6 +55,22 @@ export default function CollectorDashboardPage() {
     loadProducts()
   }, [])
 
+  useEffect(() => {
+    async function loadRecentTransactions() {
+      if (!collectorId) return
+      try {
+        const res = await fetch(`/api/transactions?collectorId=${collectorId}`)
+        if (res.ok) {
+          const data: RecentTransaction[] = await res.json()
+          setRecentTransactions(data.slice(0, 5))
+        }
+      } catch {
+        // ignore silently, the message area already covers user feedback
+      }
+    }
+    loadRecentTransactions()
+  }, [collectorId])
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
@@ -67,7 +83,7 @@ export default function CollectorDashboardPage() {
         userWallet: formData.userWallet,
         productTypeId: formData.productTypeId,
         amount: parseFloat(formData.amount),
-        collectorId: session?.user?.id,
+        collectorId,
       }),
     })
 
@@ -114,21 +130,28 @@ export default function CollectorDashboardPage() {
       </header>
 
       <div className="dashboard-content">
-        <section className="dashboard-section">
+        <section className="dashboard-section" aria-live="polite">
           <h2>Panel de Recolector</h2>
           <p>Email: {session.user?.email}</p>
         </section>
 
-        <section className="dashboard-section">
+        <section className="dashboard-section" aria-live="polite">
           <h3>Registrar Recolección</h3>
 
           {message.text && (
-            <p className={message.type === 'success' ? 'collector-success' : 'auth-error'}>
+            <p
+              className={message.type === 'success' ? 'collector-success' : 'auth-error'}
+              role={message.type === 'success' ? 'status' : 'alert'}
+              aria-live="assertive"
+            >
               {message.text}
             </p>
           )}
 
-          <form onSubmit={handleSubmit} className="collector-form">
+          <form onSubmit={handleSubmit} className="collector-form" aria-describedby="collector-form-instructions">
+            <p id="collector-form-instructions" className="sr-only">
+              Ingresa wallet del usuario, selecciona material y cantidad en kilogramos para registrar.
+            </p>
             <div className="collector-field">
               <label className="collector-label" htmlFor="userWallet">
                 Wallet del Usuario (NFC)
@@ -188,13 +211,25 @@ export default function CollectorDashboardPage() {
             </button>
           </form>
         </section>
-        <RecyclingGraph role="collector" collectorId={session.user?.id} />
+        <section className="dashboard-section leaderboard-callout">
+          <div>
+            <h3>Ranking de ubicaciones</h3>
+            <p>Consulta el leaderboard con las comunidades que más reciclan.</p>
+          </div>
+          <button
+            type="button"
+            className="leaderboard-button"
+            onClick={() => router.push('/leaderboard')}
+          >
+            Ver leaderboard
+          </button>
+        </section>
         <section className="dashboard-section">
           <h3>Recolecciones recientes</h3>
           {recentTransactions.length === 0 ? (
             <p>No hay recolecciones recientes</p>
           ) : (
-            <table className="transactions-table">
+            <table className="transactions-table" aria-live="polite" aria-label="Recolecciones recientes">
               <thead>
                 <tr>
                   <th>Usuario</th>

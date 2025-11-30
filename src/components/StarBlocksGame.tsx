@@ -10,39 +10,37 @@ interface StarBlocksGameProps {
   error: string | null
 }
 
-const MAX_BLOCKS = 80
-
 export function StarBlocksGame({ categoryTotals, totalPoints, loading, error }: StarBlocksGameProps) {
-  const blocks = useMemo(() => {
-    const entries: { key: StarCategoryKey; color: string }[] = []
+  const categoryState = useMemo(
+    () =>
+      starCategories.map((category, index) => {
+        const total = categoryTotals[category.key] || 0
+        return {
+          ...category,
+          total,
+          blocks: Math.floor(total),
+          active: total > 0,
+          delay: index * 0.35,
+        }
+      }),
+    [categoryTotals]
+  )
 
-    starCategories.forEach((category) => {
-      const total = Math.floor(categoryTotals[category.key] || 0)
-      const count = Math.min(total, MAX_BLOCKS / starCategories.length)
-
-      for (let index = 0; index < count; index += 1) {
-        entries.push({ key: category.key, color: category.colorVar })
-      }
-    })
-
-    return entries.slice(0, MAX_BLOCKS)
-  }, [categoryTotals])
-
-  const completedPercentage = Math.min(1, totalPoints / MAX_BLOCKS)
+  const activeCategories = categoryState.filter((category) => category.active).length
+  const completedStar = activeCategories === starCategories.length
+  const blockCount = Math.floor(totalPoints)
 
   return (
-    <section className="dashboard-section star-game">
-      <header className="star-game__head">
+    <section className="dashboard-section star-progress">
+      <header className="star-progress__head">
         <div>
-          <p className="star-game__eyebrow">Juego de bloques</p>
-          <h3>Llena la estrella con cada kilo registrado</h3>
+          <p className="star-progress__eyebrow">Juego de bloques</p>
+          <h3>Cada material suma un punto en la estrella</h3>
         </div>
-        <div className="star-game__progress">
-          <span>{Math.floor(totalPoints)} bloques</span>
-          <small>Meta actual: {MAX_BLOCKS}</small>
-          <div className="star-game__progress-bar" aria-label="Progreso de bloques">
-            <div style={{ width: `${completedPercentage * 100}%` }} />
-          </div>
+        <div className="star-progress__summary">
+          <span>Total de bloques</span>
+          <strong>{blockCount}</strong>
+          <small>{activeCategories} / {starCategories.length} materiales activos</small>
         </div>
       </header>
 
@@ -55,39 +53,38 @@ export function StarBlocksGame({ categoryTotals, totalPoints, loading, error }: 
 
       {!loading && error && <p className="auth-error">{error}</p>}
 
-      {!loading && !error && totalPoints === 0 && (
-        <p className="star-game__empty">
-          Aún no hay bloques activos. Registra tu primera recolección para encender la estrella.
-        </p>
-      )}
-
-      {!loading && !error && totalPoints > 0 && (
-        <div className="star-game__container">
-          <div className="star-game__star" role="img" aria-label="Bloques activos de la estrella">
-            {blocks.map((block, index) => (
-              <span
-                key={`${block.key}-${index}`}
-                className={`star-game__block star-game__block--${block.key}`}
-                style={{ background: block.color }}
-              />
-            ))}
+      {!loading && !error && (
+        <>
+          <div className={`star-lab star-lab--dashboard ${completedStar ? 'star-lab--complete' : ''}`}>
+            <div className="star-assembly" role="img" aria-label="Estado de la estrella de reciclaje">
+              <div className="star-outline" />
+              {categoryState.map((category) => (
+                <span
+                  key={category.key}
+                  className={`star-block star-block--${category.key} ${
+                    category.active ? 'star-block--active' : 'star-block--inactive'
+                  }`}
+                  aria-label={`${category.label}: ${category.blocks} bloques`}
+                  role="img"
+                  style={{ animationDelay: `${category.delay}s` }}
+                />
+              ))}
+            </div>
+            <p className="star-progress__note">En el futuro te verás recompensado.</p>
           </div>
 
-          <ul className="star-game__legend">
-            {starCategories.map((category) => {
-              const count = Math.floor(categoryTotals[category.key] || 0)
-              return (
-                <li key={category.key}>
-                  <span style={{ background: category.colorVar }} />
-                  <div>
-                    <p>{category.label}</p>
-                    <small>{count} bloques</small>
-                  </div>
-                </li>
-              )
-            })}
+          <ul className="star-progress__legend" aria-label="Bloques por categoría">
+            {categoryState.map((category) => (
+              <li key={category.key}>
+                <span style={{ background: category.colorVar }} />
+                <div>
+                  <p>{category.label}</p>
+                  <small>{category.blocks} bloques</small>
+                </div>
+              </li>
+            ))}
           </ul>
-        </div>
+        </>
       )}
     </section>
   )
