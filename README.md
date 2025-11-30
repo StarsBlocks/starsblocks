@@ -6,7 +6,19 @@
 
 StarBlocks es una plataforma web construida con Next.js 13, TypeScript y estilos custom (globals + variables) que conecta a recicladores urbanos con recolectores y registra cada entrega sobre la blockchain de BSV para garantizar trazabilidad y recompensas transparentes.
 
-La identificación para la entrega de reciclaje se realiza mediante el uso de una llave NFC, que será entregada, una vez completado el registro, por el funcionario del ayuntamiento encargado del punto de recolección más cercano a su domicilio. Este registro puede realizarse online o presencialmente en el mismo punto de reciclaje. Así, cada entrega queda registrada en la blockchain, garantizando trazabilidad y recompensas transparentes para los usuarios.
+La identificación para la entrega de reciclaje se realiza mediante el uso de una llave NFC, que será entregada, una vez completado el registro, por el funcionario del ayuntamiento encargado del punto de recolección más cercano a su domicilio. Este registro puede realizarse online o presencialmente en el mismo punto de reciclaje. Alternativamente, los usuarios también pueden identificarse mediante un código QR visible en su página de usuario dentro de la plataforma. Así, cada entrega queda registrada en la blockchain, garantizando trazabilidad y recompensas transparentes para los usuarios.
+
+## Visión de futuro: Red IoT de reciclaje inteligente
+
+Actualmente, StarBlocks opera con un modelo de entrega manual en puntos de recolección atendidos por funcionarios. Sin embargo, la arquitectura de la plataforma está diseñada para escalar hacia una **red distribuida de dispositivos IoT** que automatizará y expandirá significativamente las capacidades del sistema:
+
+- **Contenedores inteligentes**: Equipados con sensores de peso, lectores NFC/QR y conectividad, permitirán a los ciudadanos depositar residuos en cualquier momento del día. El contenedor identificará al usuario, pesará el material y registrará automáticamente la transacción en blockchain.
+- **Camiones de recolección conectados**: Vehículos dotados de sistemas de pesaje y geolocalización que registrarán en tiempo real cada recogida, asociándola a rutas optimizadas y puntos de origen verificados.
+- **Puntos de reciclaje autónomos (reverse vending machines)**: Máquinas de autoservicio para envases específicos (PET, latas, vidrio) que dispensarán recompensas instantáneas al usuario.
+- **Sensores de llenado**: Monitorización del nivel de contenedores para optimizar rutas de recogida y reducir emisiones de la flota.
+- **Dashboard municipal en tiempo real**: Panel de control para ayuntamientos con visualización de flujos de residuos, alertas de capacidad y métricas de impacto ambiental.
+
+Esta evolución convertirá a StarBlocks en el **sistema operativo del reciclaje urbano**, donde cada interacción —desde el ciudadano hasta la planta de tratamiento— queda trazada, verificada y recompensada de forma transparente.
 
 ## Stack técnico
 
