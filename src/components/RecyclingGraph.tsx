@@ -152,7 +152,6 @@ export function RecyclingGraph({
           <strong>{totalKg.toFixed(1)} kg</strong>
         </div>
       </header>
-
       {loading && (
         <div className="recycling-graph__loading">
           <span />
@@ -276,7 +275,7 @@ export function RecyclingGraph({
                 {timelineEntries.map((entry) => {
                   const totalUnits = Math.max(1, Math.round(entry.amount))
                   const cubesToRender = Math.min(totalUnits, MAX_TIMELINE_CUBES)
-                  const overflow = totalUnits - MAX_TIMELINE_CUBES
+                  const overflow = Math.max(0, totalUnits - MAX_TIMELINE_CUBES)
 
                   return (
                     <article key={entry.id} className="recycling-graph__timeline-item">
