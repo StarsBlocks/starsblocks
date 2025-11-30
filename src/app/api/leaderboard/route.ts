@@ -11,6 +11,14 @@ interface LeaderboardLocation {
 
 type CategoryBucket = Map<string, LeaderboardLocation>
 
+interface LeaderboardRow {
+  amount: number
+  productName: string
+  council?: string
+  province?: string
+  community?: string
+}
+
 export async function GET() {
   const { db } = await connectToDatabase()
 
@@ -44,14 +52,17 @@ export async function GET() {
     },
   ]
 
-  const rows = await db.collection('transactions').aggregate(pipeline).toArray()
+  const rows = await db
+    .collection('transactions')
+    .aggregate<LeaderboardRow>(pipeline)
+    .toArray()
 
   const categoryBuckets = starCategories.reduce<Record<StarCategoryKey, CategoryBucket>>((map, cat) => {
     map[cat.key] = new Map()
     return map
   }, {} as Record<StarCategoryKey, CategoryBucket>)
 
-  rows.forEach((row: { amount: number; productName: string; council?: string; province?: string; community?: string }) => {
+  rows.forEach((row) => {
     const category = matchStarCategory(row.productName)
     const bucket = categoryBuckets[category.key]
     const locationKey = `${row.council || ''}|${row.province || ''}|${row.community || ''}`
