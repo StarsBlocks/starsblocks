@@ -1084,7 +1084,155 @@ select.auth-input option {
   color: rgba(248, 250, 252, 0.7);
 }
 
-/* Wallet section */
+/* Wallet Card */
+.wallet-card {
+  background: linear-gradient(135deg, #22c55e 0%, #4ade80 50%, #34d399 100%);
+  border-radius: 24px;
+  padding: 2px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 20px 50px rgba(74, 222, 128, 0.35);
+}
+
+.wallet-card__content {
+  background: linear-gradient(145deg, rgba(22, 101, 52, 0.97), rgba(21, 128, 61, 0.95));
+  border-radius: 22px;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.wallet-card__qr-section {
+  position: relative;
+}
+
+.wallet-card__qr {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 0.75rem;
+  overflow: hidden;
+  box-shadow:
+    0 0 20px rgba(74, 222, 128, 0.5),
+    0 0 40px rgba(74, 222, 128, 0.3),
+    0 0 60px rgba(74, 222, 128, 0.15);
+  animation: qr-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes qr-glow {
+  from {
+    box-shadow:
+      0 0 20px rgba(74, 222, 128, 0.5),
+      0 0 40px rgba(74, 222, 128, 0.3),
+      0 0 60px rgba(74, 222, 128, 0.15);
+  }
+  to {
+    box-shadow:
+      0 0 25px rgba(74, 222, 128, 0.7),
+      0 0 50px rgba(74, 222, 128, 0.45),
+      0 0 75px rgba(74, 222, 128, 0.25);
+  }
+}
+
+.wallet-card__qr svg {
+  display: block;
+  border-radius: 8px;
+}
+
+.wallet-card__qr--loading {
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.wallet-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wallet-card__label {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.wallet-card__title {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.wallet-card__hint {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 280px;
+}
+
+.wallet-card__code-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.wallet-card__code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  flex: 1;
+}
+
+.wallet-card__copy {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 200ms ease;
+  white-space: nowrap;
+}
+
+.wallet-card__copy:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 640px) {
+  .wallet-card__content {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .wallet-card__hint {
+    max-width: 100%;
+  }
+
+  .wallet-card__code-box {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .wallet-card__copy {
+    width: 100%;
+  }
+}
+
+/* Legacy wallet box */
 .wallet-box {
   display: flex;
   align-items: center;
@@ -1093,7 +1241,7 @@ select.auth-input option {
   border: 1px solid var(--color-primary);
   border-radius: 14px;
   padding: 1rem;
-  margin-top: 0.75rem;
+  width: 100%;
 }
 
 .wallet-code {
@@ -2095,6 +2243,43 @@ select.auth-input option {
     max-height: calc(60vh - 50px);
   }
 }
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pagination-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.85);
+  color: #f8fafc;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border 160ms ease, background 160ms ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: var(--color-secondary);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  color: rgba(248, 250, 252, 0.75);
+  font-size: 0.9rem;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

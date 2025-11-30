@@ -3,6 +3,7 @@
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { QRCodeSVG } from 'qrcode.react'
 import { UserRecyclingExperience } from '@/components/UserRecyclingExperience'
 
 interface UserData {
@@ -229,17 +230,41 @@ export default function DashboardPage() {
           )}
         </section>
 
-        <section className="dashboard-section" aria-live="polite">
-          <h3>Tu ID para reciclaje</h3>
-          <p>Muestra este código al recolector para registrar tu reciclaje</p>
-          <div className="wallet-box">
-            <code className="wallet-code">
-              {userData.wallet || 'Cargando...'}
-            </code>
-                  <button onClick={copyWallet} className="wallet-copy" type="button">
-                    {copied ? '¡Copiado!' : 'Copiar'}
-                  </button>
+        <section className="wallet-card" aria-live="polite">
+          <div className="wallet-card__content">
+            <div className="wallet-card__qr-section">
+              {userData.wallet ? (
+                <div className="wallet-card__qr">
+                  <QRCodeSVG
+                    value={userData.wallet}
+                    size={160}
+                    bgColor="#ffffff"
+                    fgColor="#16a34a"
+                    level="M"
+                  />
                 </div>
+              ) : (
+                <div className="wallet-card__qr wallet-card__qr--loading">
+                  <span>...</span>
+                </div>
+              )}
+            </div>
+            <div className="wallet-card__info">
+              <span className="wallet-card__label">Tu ID para reciclaje</span>
+              <h3 className="wallet-card__title">Escanea o copia tu código</h3>
+              <p className="wallet-card__hint">Muestra este QR al recolector para registrar tu reciclaje</p>
+              <div className="wallet-card__code-box">
+                <code className="wallet-card__code">
+                  {userData.wallet
+                    ? `${userData.wallet.slice(0, 12)}...${userData.wallet.slice(-8)}`
+                    : 'Cargando...'}
+                </code>
+                <button onClick={copyWallet} className="wallet-card__copy" type="button">
+                  {copied ? '¡Copiado!' : 'Copiar ID'}
+                </button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className="stats-grid">
@@ -248,7 +273,7 @@ export default function DashboardPage() {
             <p>Total reciclado</p>
           </div>
           <div className="stat-card">
-            <h3>{userData.totalPoints || 0}</h3>
+            <h3>{(userData.totalPoints ?? 0).toFixed(2)}</h3>
             <p>Puntos ganados</p>
           </div>
           <div className="stat-card">
@@ -258,6 +283,20 @@ export default function DashboardPage() {
         </section>
 
         <UserRecyclingExperience userId={session.user?.id} />
+
+        <section className="dashboard-section leaderboard-callout">
+          <div>
+            <h3>Ranking de ubicaciones</h3>
+            <p>Consulta el leaderboard con las comunidades que más reciclan.</p>
+          </div>
+          <button
+            type="button"
+            className="leaderboard-button"
+            onClick={() => router.push('/leaderboard')}
+          >
+            Ver leaderboard
+          </button>
+        </section>
 
         <section className="dashboard-section">
           <h3>Historial de reciclaje</h3>
@@ -276,7 +315,7 @@ export default function DashboardPage() {
               <tbody>
                 {transactions.map((t) => (
                   <tr key={t._id}>
-                    <td>{new Date(t.createdAt).toLocaleDateString()}</td>
+                    <td>{new Date(t.createdAt).toLocaleString()}</td>
                     <td>{t.amount} kg</td>
                     <td>
                       <span className="status-badge status-badge--confirmed">

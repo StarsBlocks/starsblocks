@@ -4,7 +4,7 @@ import { connectToDatabase } from '@/lib/mongodb'
 import { Transaction, ProductType, User } from '@/lib/types'
 import { registerWasteOnChain } from '@/lib/blockchain'
 
-// GET /api/transactions - Lista transacciones
+// GET /api/transactions - Lista transacciones con datos de usuario y producto
 export async function GET(request: NextRequest) {
   const { db } = await connectToDatabase()
   const { searchParams } = new URL(request.url)
@@ -17,7 +17,40 @@ export async function GET(request: NextRequest) {
   if (collectorId) filter.collectorId = new ObjectId(collectorId)
   if (status) filter.status = status
 
-  const transactions = await db.collection<Transaction>('transactions').find(filter).toArray()
+  // Usar aggregation para incluir userName y productName
+  const transactions = await db.collection('transactions').aggregate([
+    { $match: filter },
+    { $sort: { createdAt: -1 } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'userId',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    {
+      $lookup: {
+        from: 'productTypes',
+        localField: 'productTypeId',
+        foreignField: '_id',
+        as: 'product'
+      }
+    },
+    {
+      $addFields: {
+        userName: { $arrayElemAt: ['$user.name', 0] },
+        productName: { $arrayElemAt: ['$product.name', 0] }
+      }
+    },
+    {
+      $project: {
+        user: 0,
+        product: 0
+      }
+    }
+  ]).toArray()
+
   return NextResponse.json(transactions)
 }
 
