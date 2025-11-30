@@ -7,7 +7,9 @@ type AuthNavProps = {
 export function AuthNav({ current }: AuthNavProps) {
   return (
     <header className="dashboard-header auth-nav">
-      <h1 className="dashboard-logo">StarBlocks</h1>
+      <h1 className="dashboard-logo">
+        <Link href="/">StarBlocks</Link>
+      </h1>
       <nav className="auth-nav__links" aria-label="Navegación principal">
         <Link
           href="/registro"

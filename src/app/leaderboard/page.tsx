@@ -69,62 +69,64 @@ export default function LeaderboardPage() {
   }
 
   return (
-    <main className="leaderboard-shell">
+    <>
       <AuthNav />
-      <section className="leaderboard-hero">
-        <div>
-          <p className="leaderboard-hero__eyebrow">Leaderboard</p>
-          <h1>Ubicaciones más activas por material</h1>
-          <p>
-            Explora qué ayuntamientos y comunidades lideran el reciclaje para cada categoría. Los datos se actualizan con
-            cada recolección validada.
-          </p>
-        </div>
-      </section>
-
-      {loading && (
-        <section className="dashboard-section">
-          <p>Cargando leaderboard...</p>
+      <main className="leaderboard-shell">
+        <section className="leaderboard-hero">
+          <div>
+            <p className="leaderboard-hero__eyebrow">Leaderboard</p>
+            <h1>Ubicaciones más activas por material</h1>
+            <p>
+              Explorá qué ayuntamientos y comunidades lideran el reciclaje para cada categoría. Los datos se actualizan
+              con cada recolección validada.
+            </p>
+          </div>
         </section>
-      )}
 
-      {error && !loading && (
-        <section className="dashboard-section">
-          <p className="auth-error">{error}</p>
-        </section>
-      )}
+        {loading && (
+          <section className="dashboard-section">
+            <p>Cargando leaderboard...</p>
+          </section>
+        )}
 
-      {!loading && !error && (
-        <section className="leaderboard-grid">
-          {categories.map((category) => (
-            <article key={category.key} className="leaderboard-card">
-              <header style={{ borderColor: category.color }}>
-                <div>
-                  <span style={{ background: category.color }} />
-                  <h2>{category.label}</h2>
-                </div>
-                <p>{category.locations.length ? 'Top ubicaciones' : 'Sin registros'}</p>
-              </header>
-              {category.locations.length === 0 ? (
-                <p className="leaderboard-card__empty">Aún no hay registros para esta categoría.</p>
-              ) : (
-                <ol>
-                  {category.locations.map((location, index) => (
-                    <li key={`${category.key}-${locationLabel(location)}-${index}`}>
-                      <span className="leaderboard-position">#{index + 1}</span>
-                      <div>
-                        <p>{locationLabel(location)}</p>
-                        {locationMeta(location) && <small>{locationMeta(location)}</small>}
-                      </div>
-                      <strong>{location.totalKg.toFixed(1)} kg</strong>
-                    </li>
-                  ))}
-                </ol>
-              )}
-            </article>
-          ))}
-        </section>
-      )}
-    </main>
+        {error && !loading && (
+          <section className="dashboard-section">
+            <p className="auth-error">{error}</p>
+          </section>
+        )}
+
+        {!loading && !error && (
+          <section className="leaderboard-grid">
+            {categories.map((category) => (
+              <article key={category.key} className="leaderboard-card">
+                <header style={{ borderColor: category.color }}>
+                  <div>
+                    <span style={{ background: category.color }} />
+                    <h2>{category.label}</h2>
+                  </div>
+                  <p>{category.locations.length ? 'Top ubicaciones' : 'Sin registros'}</p>
+                </header>
+                {category.locations.length === 0 ? (
+                  <p className="leaderboard-card__empty">Aún no hay registros para esta categoría.</p>
+                ) : (
+                  <ol>
+                    {category.locations.map((location, index) => (
+                      <li key={`${category.key}-${locationLabel(location)}-${index}`}>
+                        <span className="leaderboard-position">#{index + 1}</span>
+                        <div>
+                          <p>{locationLabel(location)}</p>
+                          {locationMeta(location) && <small>{locationMeta(location)}</small>}
+                        </div>
+                        <strong>{location.totalKg.toFixed(1)} kg</strong>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </article>
+            ))}
+          </section>
+        )}
+      </main>
+    </>
   )
 }
