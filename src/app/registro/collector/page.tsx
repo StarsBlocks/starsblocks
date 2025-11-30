@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import spainLocations from '@/data/spain-locations.json'
 import CustomSelect from '@/components/CustomSelect'
+import { AuthNav } from '@/components/AuthNav'
 
 export default function RegistroCollectorPage() {
   const router = useRouter()
@@ -64,12 +65,14 @@ export default function RegistroCollectorPage() {
   }
 
   return (
-    <main className="auth-shell">
-      <div className="auth-panel auth-panel--wide">
-        <div className="auth-heading">
-          <h1>Registro Recolector</h1>
-          <p>Únete como recolector y registra transacciones de reciclaje</p>
-        </div>
+    <>
+      <AuthNav current="register" />
+      <main className="auth-shell">
+        <div className="auth-panel auth-panel--wide">
+          <div className="auth-heading">
+            <h1>Registro Recolector</h1>
+            <p>Únete como recolector y registra transacciones de reciclaje</p>
+          </div>
 
         {error && <p className="auth-error">{error}</p>}
 
@@ -258,5 +261,6 @@ export default function RegistroCollectorPage() {
         </p>
       </div>
     </main>
+    </>
   )
 }
