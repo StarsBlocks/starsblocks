@@ -1,10 +1,11 @@
 # StarBlocks
+## Convierte tu reciclaje en bloques digitales y compite por el primer puesto.
 
 <p align="center">
   <img src="./public/logo.jpg" alt="Logo de StarBlocks" width="180" height="180" />
 </p>
 
-StarBlocks es una plataforma web construida con Next.js 13, TypeScript y estilos custom (globals + variables) que conecta a recicladores urbanos con recolectores y registra cada entrega sobre la blockchain de BSV para garantizar trazabilidad y recompensas transparentes.
+StarBlocks es una plataforma web construida con Next.js 14, TypeScript y estilos custom (globals + variables) que conecta a recicladores urbanos con recolectores y registra cada entrega sobre la blockchain de BSV para garantizar trazabilidad y recompensas transparentes.
 
 La identificación para la entrega de reciclaje se realiza mediante el uso de una llave NFC, que será entregada, una vez completado el registro, por el funcionario del ayuntamiento encargado del punto de recolección más cercano a su domicilio. Este registro puede realizarse online o presencialmente en el mismo punto de reciclaje. Alternativamente, los usuarios también pueden identificarse mediante un código QR visible en su página de usuario dentro de la plataforma. Así, cada entrega queda registrada en la blockchain, garantizando trazabilidad y recompensas transparentes para los usuarios.
 
@@ -35,7 +36,7 @@ Esta evolución convertirá a StarBlocks en el **sistema operativo del reciclaje
 ┌────────────────────────────────────────────────────────────────────┐
 │                         Aplicación StarBlocks                      │
 │                                                                    │
-│  Frontend (Next.js 13, TypeScript, CSS)                            │
+│  Frontend (Next.js 14, TypeScript, CSS)                            │
 │  ┌──────────────────────────────────────────────────────────────┐  │
 │  │ Pages & Layout                                               │  │
 │  │  - Landing (marketing, CTA, inline footer)                   │  │
