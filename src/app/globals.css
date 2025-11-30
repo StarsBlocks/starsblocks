@@ -165,6 +165,153 @@ a {
   background: rgba(56, 189, 248, 0.12);
 }
 
+.leaderboard-callout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.leaderboard-button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1.5rem;
+  font-weight: 600;
+  background: linear-gradient(120deg, var(--color-primary), var(--color-secondary));
+  color: #030712;
+  cursor: pointer;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.leaderboard-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 25px rgba(56, 189, 248, 0.35);
+}
+
+.leaderboard-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 4vw, 3rem) 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.leaderboard-hero {
+  background: var(--color-panel);
+  border-radius: 28px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-panel);
+}
+
+.leaderboard-hero__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.75rem;
+  color: rgba(248, 250, 252, 0.6);
+}
+
+.leaderboard-hero h1 {
+  margin: 0.5rem 0;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+}
+
+.leaderboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.leaderboard-card {
+  background: rgba(9, 12, 32, 0.9);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.leaderboard-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.75rem;
+}
+
+.leaderboard-card header div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.leaderboard-card header span {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.leaderboard-card header h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.leaderboard-card header p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(248, 250, 252, 0.7);
+}
+
+.leaderboard-card ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.leaderboard-card li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.leaderboard-position {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.leaderboard-card li p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.leaderboard-card li small {
+  color: rgba(248, 250, 252, 0.6);
+}
+
+.leaderboard-card li strong {
+  font-size: 1rem;
+}
+
+.leaderboard-card__empty {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.65);
+  font-style: italic;
+}
+
 .home-shell {
   min-height: 100vh;
   display: flex;

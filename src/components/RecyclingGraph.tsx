@@ -11,6 +11,7 @@ interface RecyclingGraphProps {
   userId?: string
   collectorId?: string
   prefetchedData?: RecyclingHistoryState
+  refreshKey?: string | number
 }
 
 interface Bucket {
@@ -33,13 +34,20 @@ function readableMonth(key: string) {
   return date.toLocaleString('es-ES', { month: 'short', year: '2-digit' })
 }
 
-export function RecyclingGraph({ role, userId, collectorId, prefetchedData }: RecyclingGraphProps) {
+export function RecyclingGraph({
+  role,
+  userId,
+  collectorId,
+  prefetchedData,
+  refreshKey,
+}: RecyclingGraphProps) {
   const identifierReady = role === 'user' ? Boolean(userId) : Boolean(collectorId)
 
   const fallbackData = useRecyclingHistory({
     userId: role === 'user' ? userId : undefined,
     collectorId: role === 'collector' ? collectorId : undefined,
     disabled: Boolean(prefetchedData),
+    refreshKey,
   })
 
   const { transactions, products, loading, error } = prefetchedData ?? fallbackData
@@ -296,7 +304,7 @@ export function RecyclingGraph({ role, userId, collectorId, prefetchedData }: Re
                 {timelineEntries.map((entry) => {
                   const totalUnits = Math.max(1, Math.round(entry.amount))
                   const cubesToRender = Math.min(totalUnits, MAX_TIMELINE_CUBES)
-                  const overflow = totalUnits - cubesToRender
+                  const overflow = totalUnits - MAX_TIMELINE_CUBES
 
                   return (
                     <article key={entry.id} className="recycling-graph__timeline-item">
@@ -316,9 +324,7 @@ export function RecyclingGraph({ role, userId, collectorId, prefetchedData }: Re
                             style={{ background: entry.category.colorVar }}
                           />
                         ))}
-                        {overflow > 0 && (
-                          <span className="recycling-graph__cube-more">+{overflow} kg</span>
-                        )}
+                        {overflow > 0 && <span className="recycling-graph__cube-more">+{overflow} kg</span>}
                       </div>
                     </article>
                   )
