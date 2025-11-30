@@ -9,6 +9,10 @@ const nextConfig = {
         resourceRegExp: /^(oracledb|pg-native|pg-query-stream|sqlite3|better-sqlite3|mysql|mysql2|tedious)$/,
       })
     )
+    // Suppress critical dependency warnings from dynamic imports
+    config.stats = {
+      warningsFilter: (warning) => warning.message && warning.message.includes('Critical dependency: the request of a dependency is an expression'),
+    };
     return config
   },
 }
