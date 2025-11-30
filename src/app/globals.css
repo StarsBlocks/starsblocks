@@ -134,6 +134,37 @@ a {
   color: var(--color-secondary);
 }
 
+.auth-nav {
+  margin-bottom: 2rem;
+}
+
+.auth-nav__links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.auth-nav__link {
+  padding: 0.45rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 250, 252, 0.3);
+  color: rgba(248, 250, 252, 0.85);
+  text-decoration: none;
+  font-weight: 600;
+  transition: border 160ms ease, color 160ms ease, background 160ms ease;
+}
+
+.auth-nav__link:hover {
+  border-color: rgba(248, 250, 252, 0.6);
+}
+
+.auth-nav__link--active {
+  border-color: rgba(248, 250, 252, 0.85);
+  color: #f8fafc;
+  background: rgba(56, 189, 248, 0.12);
+}
+
 .home-shell {
   min-height: 100vh;
   display: flex;
@@ -1097,6 +1128,17 @@ select.auth-input option {
   color: var(--color-primary);
 }
 
+.recycling-graph__timeframe {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.65);
+}
+
+.recycling-graph__timeframe time {
+  font-weight: 600;
+  color: #f8fafc;
+}
+
 .recycling-graph__chart {
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1141,6 +1183,101 @@ select.auth-input option {
   height: 14px;
   border-radius: 4px;
   flex-shrink: 0;
+}
+
+.recycling-graph__timeline {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.recycling-graph__timeline-title {
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(248, 250, 252, 0.65);
+}
+
+.recycling-graph__timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.recycling-graph__timeline-item {
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(9, 12, 32, 0.75);
+  padding: 0.85rem 1rem 1rem;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.25);
+}
+
+.recycling-graph__timeline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.75);
+}
+
+.recycling-graph__timeline-meta time {
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.recycling-graph__timeline-meta span {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+  color: rgba(248, 250, 252, 0.6);
+}
+
+.recycling-graph__timeline-meta strong {
+  font-size: 1rem;
+  color: var(--color-secondary);
+}
+
+.recycling-graph__cubes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14px, 18px));
+  gap: 0.35rem;
+}
+
+.recycling-graph__cube {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  animation: cubeRise 500ms ease forwards;
+}
+
+.recycling-graph__cube-more {
+  align-self: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 0.75rem;
+  color: rgba(248, 250, 252, 0.8);
+  background: rgba(15, 23, 42, 0.75);
+}
+
+@keyframes cubeRise {
+  from {
+    transform: translateY(4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .recycling-graph__empty {

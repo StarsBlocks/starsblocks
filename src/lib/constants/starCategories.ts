@@ -17,7 +17,7 @@ export const starCategories: StarCategory[] = [
   },
   {
     key: 'papel',
-    label: 'Papel',
+    label: 'Cartón',
     description:
       'Cartón y fibras se vuelven bloques celestes para monitorear fardos limpios.',
     keywords: ['papel', 'carton', 'cartón', 'paper'],

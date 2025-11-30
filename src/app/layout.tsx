@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { SiteFooter } from '@/components/SiteFooter'
+import { GlobalFooter } from '@/components/GlobalFooter'
 import { Providers } from './providers'
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default function RootLayout({
         <Providers>
           <div className="app-shell">
             <div className="app-shell__content">{children}</div>
-            <SiteFooter />
+            <GlobalFooter />
           </div>
         </Providers>
       </body>

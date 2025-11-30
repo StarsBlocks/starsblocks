@@ -19,6 +19,8 @@ interface Bucket {
   categories: Record<StarCategoryKey, number>
 }
 
+const MAX_TIMELINE_CUBES = 48
+
 function formatMonthKey(date: Date) {
   const year = date.getFullYear()
   const month = `${date.getMonth() + 1}`.padStart(2, '0')
@@ -93,6 +95,49 @@ export function RecyclingGraph({ role, userId, collectorId, prefetchedData }: Re
     return transactions.reduce((sum, tx) => sum + tx.amount, 0)
   }, [transactions])
 
+  const timeframe = useMemo(() => {
+    if (!transactions.length) return null
+    const sorted = [...transactions].sort(
+      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    )
+    const startDate = new Date(sorted[0].createdAt)
+    const endDate = new Date(sorted[sorted.length - 1].createdAt)
+    const format = (date: Date) =>
+      date.toLocaleDateString('es-ES', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    return {
+      start: format(startDate),
+      end: format(endDate),
+      startISO: startDate.toISOString(),
+      endISO: endDate.toISOString(),
+    }
+  }, [transactions])
+
+  const timelineEntries = useMemo(() => {
+    if (!transactions.length) return []
+    return [...transactions]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .map((tx) => {
+        const productName = products[tx.productTypeId] || ''
+        const category = matchStarCategory(productName)
+        const date = new Date(tx.createdAt)
+        return {
+          id: tx._id,
+          amount: tx.amount,
+          category,
+          isoDate: date.toISOString(),
+          dateLabel: date.toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+          }),
+        }
+      })
+  }, [transactions, products])
+
   const isCollector = role === 'collector'
   const viewBoxWidth = 640
   const viewBoxHeight = 280
@@ -120,6 +165,13 @@ export function RecyclingGraph({ role, userId, collectorId, prefetchedData }: Re
           <strong>{totalKg.toFixed(1)} kg</strong>
         </div>
       </header>
+      {timeframe && (
+        <p className="recycling-graph__timeframe">
+          {isCollector ? 'Período consolidado' : 'Período medido'}:{' '}
+          <time dateTime={timeframe.startISO}>{timeframe.start}</time> –{' '}
+          <time dateTime={timeframe.endISO}>{timeframe.end}</time>
+        </p>
+      )}
 
       {loading && (
         <div className="recycling-graph__loading">
@@ -234,6 +286,46 @@ export function RecyclingGraph({ role, userId, collectorId, prefetchedData }: Re
               </div>
             ))}
           </div>
+
+          {timelineEntries.length > 0 && (
+            <div className="recycling-graph__timeline">
+              <p className="recycling-graph__timeline-title">
+                {isCollector ? 'Cronología de recolecciones' : 'Cronología de bloques registrados'}
+              </p>
+              <div className="recycling-graph__timeline-list">
+                {timelineEntries.map((entry) => {
+                  const totalUnits = Math.max(1, Math.round(entry.amount))
+                  const cubesToRender = Math.min(totalUnits, MAX_TIMELINE_CUBES)
+                  const overflow = totalUnits - cubesToRender
+
+                  return (
+                    <article key={entry.id} className="recycling-graph__timeline-item">
+                      <div className="recycling-graph__timeline-meta">
+                        <time dateTime={entry.isoDate}>{entry.dateLabel}</time>
+                        <span>{entry.category.label}</span>
+                        <strong>{entry.amount.toFixed(1)} kg</strong>
+                      </div>
+                      <div
+                        className="recycling-graph__cubes"
+                        aria-label={`Bloques de ${entry.category.label} (${entry.amount.toFixed(1)} kg)`}
+                      >
+                        {Array.from({ length: cubesToRender }).map((_, cubeIndex) => (
+                          <span
+                            key={`${entry.id}-${cubeIndex}`}
+                            className="recycling-graph__cube"
+                            style={{ background: entry.category.colorVar }}
+                          />
+                        ))}
+                        {overflow > 0 && (
+                          <span className="recycling-graph__cube-more">+{overflow} kg</span>
+                        )}
+                      </div>
+                    </article>
+                  )
+                })}
+              </div>
+            </div>
+          )}
         </>
       )}
     </section>
