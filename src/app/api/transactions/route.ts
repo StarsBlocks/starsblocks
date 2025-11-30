@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Tipo de producto no encontrado' }, { status: 404 })
   }
 
-  const pointsEarned = body.amount * productType.pointsPerKg
+  const pointsEarned = body.amount * productType.pricePerKg
 
   // Registrar en blockchain
   const txHash = await registerWasteOnChain({
