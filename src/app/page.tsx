@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { SiteFooter } from '@/components/SiteFooter'
 import { starCategories } from '@/lib/constants/starCategories'
 
 export default function Home() {
@@ -33,6 +34,8 @@ export default function Home() {
             Cada bloque almacenado valida peso, origen y categoría del residuo. Tus estadísticas se sincronizan en
             segundos y tu progreso nunca se pierde.
           </p>
+
+          <SiteFooter variant="inline" />
         </div>
 
         <div className="hero-insights">
