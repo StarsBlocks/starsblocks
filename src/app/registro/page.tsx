@@ -9,6 +9,14 @@ export default function RegistroPage() {
   const router = useRouter()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  
+  // Consentimientos granulares
+  const [consents, setConsents] = useState({
+    shareStats: false,
+    shareHistory: false,
+    shareLocation: false,
+    allowRankings: true, // Por defecto activo para gamificación
+  })
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -21,6 +29,7 @@ export default function RegistroPage() {
       password: formData.get('password'),
       name: formData.get('name'),
       dni: formData.get('dni'),
+      privacySettings: consents,
     }
 
     const res = await fetch('/api/auth/register', {
@@ -113,6 +122,51 @@ export default function RegistroPage() {
                 placeholder="Mínimo 6 caracteres"
               />
             </div>
+
+            {/* Consentimientos granulares */}
+            <fieldset className="auth-consents">
+              <legend className="auth-label">Privacidad y consentimientos</legend>
+              
+              <label className="auth-consent-item">
+                <input
+                  type="checkbox"
+                  checked={consents.allowRankings}
+                  onChange={(e) => setConsents({ ...consents, allowRankings: e.target.checked })}
+                />
+                <span>Aparecer en rankings públicos</span>
+              </label>
+
+              <label className="auth-consent-item">
+                <input
+                  type="checkbox"
+                  checked={consents.shareStats}
+                  onChange={(e) => setConsents({ ...consents, shareStats: e.target.checked })}
+                />
+                <span>Compartir estadísticas (kg reciclados, tokens)</span>
+              </label>
+
+              <label className="auth-consent-item">
+                <input
+                  type="checkbox"
+                  checked={consents.shareHistory}
+                  onChange={(e) => setConsents({ ...consents, shareHistory: e.target.checked })}
+                />
+                <span>Compartir historial de transacciones</span>
+              </label>
+
+              <label className="auth-consent-item">
+                <input
+                  type="checkbox"
+                  checked={consents.shareLocation}
+                  onChange={(e) => setConsents({ ...consents, shareLocation: e.target.checked })}
+                />
+                <span>Compartir ubicación/ayuntamiento</span>
+              </label>
+
+              <p className="auth-consent-note">
+                Puedes cambiar estos ajustes en cualquier momento desde tu perfil.
+              </p>
+            </fieldset>
 
             <button className="auth-button" type="submit" disabled={loading}>
               {loading ? 'Registrando...' : 'Registrarme'}

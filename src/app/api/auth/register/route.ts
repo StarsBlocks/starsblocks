@@ -2,8 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import { connectToDatabase } from '@/lib/mongodb'
-import { User } from '@/lib/types'
+import { User, PrivacySettings } from '@/lib/types'
 import { createWallet } from '@/lib/blockchain'
+
+// Valores por defecto de privacidad
+const defaultPrivacySettings: PrivacySettings = {
+  shareStats: false,
+  shareHistory: false,
+  shareLocation: false,
+  allowRankings: true,
+}
 
 // Encriptar privateKey con la password del usuario
 function encryptPrivateKey(privateKey: string, password: string): string {
@@ -61,6 +69,7 @@ export async function POST(request: NextRequest) {
     role: 'user',
     wallet: walletData.publicKey,        // publicKey sin encriptar
     encryptedPrivateKey: encryptedPrivateKey, // privateKey encriptado
+    privacySettings: body.privacySettings || defaultPrivacySettings,
     createdAt: new Date(),
   }
 

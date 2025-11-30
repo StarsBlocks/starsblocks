@@ -1425,6 +1425,74 @@ select.auth-input option {
   cursor: pointer;
 }
 
+/* Settings panel consents */
+.settings-panel__consents {
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.settings-panel__consents legend {
+  padding: 0 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: rgba(248, 250, 252, 0.9);
+}
+
+.settings-panel__consents legend small {
+  font-weight: 400;
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+}
+
+.settings-consent-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: rgba(248, 250, 252, 0.85);
+}
+
+.settings-consent-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.settings-consent-item span {
+  line-height: 1.4;
+}
+
+.settings-panel__save-consents {
+  margin-top: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(120deg, var(--color-primary), var(--color-secondary));
+  color: #030712;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+
+.settings-panel__save-consents:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.settings-panel__save-consents:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Star blocks game */
 .star-game__head {
   display: flex;
@@ -2289,4 +2357,49 @@ select.auth-input option {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+/* Consent checkboxes */
+.auth-consents {
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.auth-consents legend {
+  padding: 0 0.5rem;
+  font-weight: 600;
+}
+
+.auth-consent-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: rgba(248, 250, 252, 0.85);
+}
+
+.auth-consent-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.auth-consent-item span {
+  line-height: 1.4;
+}
+
+.auth-consent-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: rgba(248, 250, 252, 0.55);
+  font-style: italic;
 }

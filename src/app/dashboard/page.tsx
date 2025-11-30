@@ -11,6 +11,12 @@ interface UserData {
   totalKg?: number
   totalPoints?: number
   totalTransactions?: number
+  privacySettings?: {
+    shareStats: boolean
+    shareHistory: boolean
+    shareLocation: boolean
+    allowRankings: boolean
+  }
 }
 
 interface Transaction {
@@ -34,6 +40,14 @@ export default function DashboardPage() {
   const [settingsLoading, setSettingsLoading] = useState(false)
   const [privateKey, setPrivateKey] = useState<string | null>(null)
   const [privateKeyCopied, setPrivateKeyCopied] = useState(false)
+  const [consentsSaving, setConsentsSaving] = useState(false)
+  const [localConsents, setLocalConsents] = useState({
+    shareStats: false,
+    shareHistory: false,
+    shareLocation: false,
+    allowRankings: true,
+  })
+  const [consentsChanged, setConsentsChanged] = useState(false)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -136,6 +150,37 @@ export default function DashboardPage() {
     }
   }
 
+  // Sincronizar localConsents cuando se cargan los datos del usuario
+  useEffect(() => {
+    if (userData.privacySettings) {
+      setLocalConsents(userData.privacySettings)
+    }
+  }, [userData.privacySettings])
+
+  function handleConsentChange(key: keyof typeof localConsents, value: boolean) {
+    setLocalConsents(prev => ({ ...prev, [key]: value }))
+    setConsentsChanged(true)
+  }
+
+  async function handleSaveConsents() {
+    if (!session?.user?.id) return
+    
+    setConsentsSaving(true)
+    
+    const res = await fetch('/api/consent', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(localConsents)
+    })
+    
+    setConsentsSaving(false)
+    
+    if (res.ok) {
+      setUserData(prev => ({ ...prev, privacySettings: localConsents }))
+      setConsentsChanged(false)
+    }
+  }
+
   if (status === 'loading') {
     return (
       <main className="loading-shell">
@@ -227,6 +272,57 @@ export default function DashboardPage() {
                 </div>
               )}
             </div>
+          )}
+
+          {settingsOpen && (
+            <fieldset className="settings-panel__consents">
+              <legend>Privacidad y consentimientos</legend>
+              
+              <label className="settings-consent-item">
+                <input
+                  type="checkbox"
+                  checked={localConsents.allowRankings}
+                  onChange={(e) => handleConsentChange('allowRankings', e.target.checked)}
+                />
+                <span>Aparecer en rankings públicos</span>
+              </label>
+
+              <label className="settings-consent-item">
+                <input
+                  type="checkbox"
+                  checked={localConsents.shareStats}
+                  onChange={(e) => handleConsentChange('shareStats', e.target.checked)}
+                />
+                <span>Compartir estadísticas (kg, tokens)</span>
+              </label>
+
+              <label className="settings-consent-item">
+                <input
+                  type="checkbox"
+                  checked={localConsents.shareHistory}
+                  onChange={(e) => handleConsentChange('shareHistory', e.target.checked)}
+                />
+                <span>Compartir historial de transacciones</span>
+              </label>
+
+              <label className="settings-consent-item">
+                <input
+                  type="checkbox"
+                  checked={localConsents.shareLocation}
+                  onChange={(e) => handleConsentChange('shareLocation', e.target.checked)}
+                />
+                <span>Compartir ubicación/ayuntamiento</span>
+              </label>
+
+              <button
+                type="button"
+                className="settings-panel__save-consents"
+                onClick={handleSaveConsents}
+                disabled={!consentsChanged || consentsSaving}
+              >
+                {consentsSaving ? 'Guardando...' : 'Guardar preferencias'}
+              </button>
+            </fieldset>
           )}
         </section>
 
