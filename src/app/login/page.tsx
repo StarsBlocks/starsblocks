@@ -54,12 +54,16 @@ export default function LoginPage() {
         <div className="auth-panel">
           <div className="auth-heading">
             <h1>Iniciar sesión</h1>
-            <p>Ingresa a tu tablero de reciclaje inteligente</p>
+            <p id="login-description">Ingresa a tu tablero de reciclaje inteligente</p>
           </div>
 
-          {error && <p className="auth-error">{error}</p>}
+          {error && (
+            <p className="auth-error" role="alert" aria-live="assertive">
+              {error}
+            </p>
+          )}
 
-          <form className="auth-form" onSubmit={handleSubmit}>
+          <form className="auth-form" onSubmit={handleSubmit} aria-describedby="login-description">
             <div className="auth-field">
               <label className="auth-label" htmlFor="email">
                 Email

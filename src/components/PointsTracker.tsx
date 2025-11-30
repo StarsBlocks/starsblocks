@@ -48,7 +48,7 @@ export function PointsTracker({ categoryTotals, totalPoints, lastEntry }: Points
       </header>
 
       <div className="points-tracker__milestone">
-        <div className="points-tracker__milestone-bar" aria-label="Progreso hacia la meta">
+        <div className="points-tracker__milestone-bar" role="img" aria-label="Progreso hacia la meta">
           <div style={{ width: `${progressToMilestone * 100}%` }} />
         </div>
         <small>Última actividad: {lastEntryText}</small>

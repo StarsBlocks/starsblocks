@@ -130,21 +130,28 @@ export default function CollectorDashboardPage() {
       </header>
 
       <div className="dashboard-content">
-        <section className="dashboard-section">
+        <section className="dashboard-section" aria-live="polite">
           <h2>Panel de Recolector</h2>
           <p>Email: {session.user?.email}</p>
         </section>
 
-        <section className="dashboard-section">
+        <section className="dashboard-section" aria-live="polite">
           <h3>Registrar Recolección</h3>
 
           {message.text && (
-            <p className={message.type === 'success' ? 'collector-success' : 'auth-error'}>
+            <p
+              className={message.type === 'success' ? 'collector-success' : 'auth-error'}
+              role={message.type === 'success' ? 'status' : 'alert'}
+              aria-live="assertive"
+            >
               {message.text}
             </p>
           )}
 
-          <form onSubmit={handleSubmit} className="collector-form">
+          <form onSubmit={handleSubmit} className="collector-form" aria-describedby="collector-form-instructions">
+            <p id="collector-form-instructions" className="sr-only">
+              Ingresa wallet del usuario, selecciona material y cantidad en kilogramos para registrar.
+            </p>
             <div className="collector-field">
               <label className="collector-label" htmlFor="userWallet">
                 Wallet del Usuario (NFC)
@@ -222,7 +229,7 @@ export default function CollectorDashboardPage() {
           {recentTransactions.length === 0 ? (
             <p>No hay recolecciones recientes</p>
           ) : (
-            <table className="transactions-table">
+            <table className="transactions-table" aria-live="polite" aria-label="Recolecciones recientes">
               <thead>
                 <tr>
                   <th>Usuario</th>

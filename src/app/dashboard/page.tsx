@@ -2,7 +2,7 @@
 
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { UserRecyclingExperience } from '@/components/UserRecyclingExperience'
 
 interface UserData {
@@ -81,7 +81,23 @@ export default function DashboardPage() {
     setPrivateKey(null)
     setPrivateKeyCopied(false)
     setSettingsOpen(next)
+    if (!next && settingsButtonRef.current) {
+      settingsButtonRef.current.focus()
+    }
   }
+
+  const settingsButtonRef = useRef<HTMLButtonElement | null>(null)
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape' && settingsOpen) {
+        event.preventDefault()
+        toggleSettings()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [settingsOpen])
 
   async function handlePrivateKeyRequest(e: React.FormEvent) {
     e.preventDefault()
@@ -144,7 +160,7 @@ export default function DashboardPage() {
       </header>
 
       <div className="dashboard-content">
-        <section className="dashboard-section">
+        <section className="dashboard-section" aria-live="polite">
           <div className="credentials-header">
             <div>
               <h2>Bienvenido, {session.user?.name}</h2>
@@ -156,14 +172,22 @@ export default function DashboardPage() {
               onClick={toggleSettings}
               aria-expanded={settingsOpen}
               aria-label="Configuración de seguridad"
+              aria-controls="security-settings-panel"
+              ref={settingsButtonRef}
             >
               ⚙️
             </button>
           </div>
 
           {settingsOpen && (
-            <div className="settings-panel">
-              <h3>Llave privada para apps BSV</h3>
+            <div
+              className="settings-panel"
+              id="security-settings-panel"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="security-settings-title"
+            >
+              <h3 id="security-settings-title">Llave privada para apps BSV</h3>
               <p className="settings-panel__warning">
                 ⚠️ Guarda esta llave en un lugar seguro. Podrás usarla en otras aplicaciones BSV,
                 pero perderla significa perder acceso a tus tokens.
@@ -205,17 +229,17 @@ export default function DashboardPage() {
           )}
         </section>
 
-        <section className="dashboard-section">
+        <section className="dashboard-section" aria-live="polite">
           <h3>Tu ID para reciclaje</h3>
           <p>Muestra este código al recolector para registrar tu reciclaje</p>
           <div className="wallet-box">
             <code className="wallet-code">
               {userData.wallet || 'Cargando...'}
             </code>
-            <button onClick={copyWallet} className="wallet-copy">
-              {copied ? '¡Copiado!' : 'Copiar'}
-            </button>
-          </div>
+                  <button onClick={copyWallet} className="wallet-copy" type="button">
+                    {copied ? '¡Copiado!' : 'Copiar'}
+                  </button>
+                </div>
         </section>
 
         <section className="stats-grid">
@@ -240,7 +264,7 @@ export default function DashboardPage() {
           {transactions.length === 0 ? (
             <p>No tienes transacciones aún</p>
           ) : (
-            <table className="transactions-table">
+            <table className="transactions-table" aria-live="polite" aria-label="Transacciones recientes">
               <thead>
                 <tr>
                   <th>Fecha</th>
