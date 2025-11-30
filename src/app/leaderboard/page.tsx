@@ -91,7 +91,9 @@ export default function LeaderboardPage() {
 
         {error && !loading && (
           <section className="dashboard-section" role="alert">
-            <p className="auth-error" aria-live="assertive">{error}</p>
+            <p className="auth-error" aria-live="assertive">
+              {error}
+            </p>
           </section>
         )}
 

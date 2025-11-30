@@ -59,16 +59,16 @@ export function StarBlocksGame({ categoryTotals, totalPoints, loading, error }: 
             <div className="star-assembly" role="img" aria-label="Estado de la estrella de reciclaje">
               <div className="star-outline" />
               {categoryState.map((category) => (
-                <span
-                  key={category.key}
-                  className={`star-block star-block--${category.key} ${
-                    category.active ? 'star-block--active' : 'star-block--inactive'
-                  }`}
-                  aria-label={`${category.label}: ${category.blocks} bloques`}
-                  role="img"
-                  style={{ animationDelay: `${category.delay}s` }}
-                />
-              ))}
+              <span
+                key={category.key}
+                className={`star-block star-block--${category.key} ${
+                  category.active ? 'star-block--active' : 'star-block--inactive'
+                }`}
+                aria-label={`${category.label}: ${category.blocks} bloques`}
+                role="img"
+                style={{ animationDelay: `${category.delay}s` }}
+              />
+            ))}
             </div>
             <p className="star-progress__note">En el futuro te verás recompensado.</p>
           </div>

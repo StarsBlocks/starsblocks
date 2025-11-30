@@ -213,6 +213,59 @@ a {
   box-shadow: 0 12px 25px rgba(56, 189, 248, 0.35);
 }
 
+.legal-shell {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 4vw, 3rem) 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.legal-hero {
+  background: rgba(9, 12, 32, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  box-shadow: var(--shadow-panel);
+}
+
+.legal-hero__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  color: rgba(248, 250, 252, 0.65);
+}
+
+.legal-hero h1 {
+  margin: 0.5rem 0;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+}
+
+.legal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.legal-section {
+  background: rgba(9, 12, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(3, 7, 18, 0.35);
+}
+
+.legal-section h2 {
+  margin-top: 0;
+  font-size: 1.15rem;
+}
+
+.legal-section p {
+  margin: 0.35rem 0;
+  color: rgba(248, 250, 252, 0.88);
+}
+
 .leaderboard-shell {
   max-width: 1100px;
   margin: 0 auto;
@@ -471,7 +524,74 @@ a {
     transition: none !important;
   }
 }
+  border-radius: 24px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 45px rgba(3, 7, 18, 0.45);
+  margin-bottom: 1rem;
+}
 
+.star-lab--complete .star-assembly {
+  animation: starOrbit 12s linear infinite;
+}
+
+.star-block--inactive {
+  filter: grayscale(1);
+  opacity: 0.3;
+  animation: none;
+}
+
+.star-progress__note {
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.7);
+}
+
+.star-progress__legend {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.star-progress__legend li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  background: rgba(9, 12, 32, 0.7);
+  border-radius: 16px;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.star-progress__legend span {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.star-progress__legend p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.star-progress__legend small {
+  color: rgba(248, 250, 252, 0.82);
+}
+
+@keyframes starOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 .home-shell {
   min-height: 100vh;
   display: flex;
