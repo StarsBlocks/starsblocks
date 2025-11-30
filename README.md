@@ -1,6 +1,10 @@
 # StarBlocks
 
-StarBlocks es una plataforma web construida con Next.js 13 (rutas app), TypeScript y estilos custom (globals + variables) que conecta a recicladores urbanos con recolectores y registra cada entrega sobre la blockchain de BSV para garantizar trazabilidad y recompensas transparentes.
+<p align="center">
+  <img src="./public/logo.jpg" alt="Logo de StarBlocks" width="180" height="180" />
+</p>
+
+StarBlocks es una plataforma web construida con Next.js 13, TypeScript y estilos custom (globals + variables) que conecta a recicladores urbanos con recolectores y registra cada entrega sobre la blockchain de BSV para garantizar trazabilidad y recompensas transparentes.
 
 ## Stack técnico
 
@@ -10,6 +14,57 @@ StarBlocks es una plataforma web construida con Next.js 13 (rutas app), TypeScri
 - **Blockchain**: `lib/blockchain` usa la wallet de BSV y scripts OP_RETURN para inscribir cada transacción (`registerWasteOnChain`). El hash `txHash` viaja en el modelo y se muestra al usuario para verificación.
 - **Autenticación**: NextAuth (credenciales) con roles `user` y `collector`. Los dashboards usan `useSession` y redirecciones condicionales.
 - **UI Reusable**: Componentes como `StarBlocksGame`, `PointsTracker`, `UserRecyclingExperience`, `SiteFooter`, `AuthNav`, etc. Animaciones accesibles (prefers-reduced-motion), skip-link global y semántica ARIA.
+
+## Esquema de arquitectura
+
+```
+┌────────────────────────────────────────────────────────────────────┐
+│                         Aplicación StarBlocks                      │
+│                                                                    │
+│  Frontend (Next.js 13, TypeScript, CSS)                            │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │ Pages & Layout                                               │  │
+│  │  - Landing (marketing, CTA, inline footer)                   │  │
+│  │  - Dashboard usuario (StarBlocksGame, PointsTracker)          │  │
+│  │  - Dashboard recolector (registro, tabla, leaderboard CTA)   │  │
+│  │  - Leaderboard (agregaciones geográficas por material)       │  │
+│  │  - Formularios (login, registro, registro recolector)        │  │
+│  └──────────────────────────────────────────────────────────────┘  │
+│                      │                                             │
+│                      ▼                                             │
+│  Componentes UI reutilizables                                      │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │ - AuthNav, SiteFooter, GlobalFooter                           │  │
+│  │ - StarBlocksGame, PointsTracker, RecyclingGraph               │  │
+│  │ - CustomSelect, UserRecyclingExperience                       │  │
+│  │ - Context Providers, skip-link, estilos globales              │  │
+│  └──────────────────────────────────────────────────────────────┘  │
+│                                                                    │
+│  API Routes (Next.js)                                              │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │ - /api/users, /api/collectors, /api/products                  │  │
+│  │ - /api/transactions (GET/POST, integra blockchain)            │  │
+│  │ - /api/leaderboard (aggregations con MongoDB)                 │  │
+│  └──────────────────────────────────────────────────────────────┘  │
+│                      │                                             │
+│                      ▼                                             │
+│  Servicios internos                                                │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │ - MongoDB Atlas (colecciones: users, collectors,               │ │
+│  │   productTypes, transactions)                                  │ │
+│  │ - `lib/mongodb` (conexión y helper)                            │ │
+│  │ - `lib/blockchain` (registro OP_RETURN y wallet BSV)           │ │
+│  │ - NextAuth (sesiones user/collector)                           │ │
+│  └──────────────────────────────────────────────────────────────┘  │
+│                                                                    │
+│  Integraciones externas                                            │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │ - Blockchain BSV (escritura de tx y verificación futura)       │ │
+│  │ - Wallet service (firmas y addresses)                          │ │
+│  │ - MongoDB Atlas cluster                                        │ │
+│  └──────────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────┘
+```
 
 ## Diseño e interacción
 
@@ -21,7 +76,7 @@ StarBlocks es una plataforma web construida con Next.js 13 (rutas app), TypeScri
 
 ## Funcionalidad y flujo
 
-1. **Registro / Login de usuarios**: Formularios con validaciones mínimas, asistencia para coleccionistas y manejo de errores en vivo.
+1. **Registro / Login de usuarios**: Formularios con validaciones mínimas, asistencia para colectores y manejo de errores en vivo.
 2. **Registro de recolectores**: Form de múltiples campos con cascadas (comunidad → provincia → municipio) usando `CustomSelect`.
 3. **Registro de transacciones**: El recolector ingresa wallet del usuario, selecciona material y kilos; el backend verifica datos, calcula puntos y escribe en blockchain. La tabla y timeline se actualizan vía `aria-live`.
 4. **Experiencia del usuario**: Visualiza su progreso en bloques (StarBlocksGame), ranking por material (PointsTracker) y cronología (RecyclingGraph). Panel seguro para obtener llave privada mediante confirmación de contraseña.
@@ -72,9 +127,9 @@ La app documenta cada recolección con:
 
 ## API relevante
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/transactions?userId=...&collectorId=...` | Historial filtrado |
-| POST | `/api/transactions` | Registrar recolección (wallet, producto, kilos) |
-| GET | `/api/leaderboard` | Ranking de ubicaciones por categoría |
-| GET/POST | `/api/users`, `/api/collectors`, `/api/products` | CRUD básico |
+| Método   | Endpoint                                         | Descripción                                     |
+| -------- | ------------------------------------------------ | ----------------------------------------------- |
+| GET      | `/api/transactions?userId=...&collectorId=...`   | Historial filtrado                              |
+| POST     | `/api/transactions`                              | Registrar recolección (wallet, producto, kilos) |
+| GET      | `/api/leaderboard`                               | Ranking de ubicaciones por categoría            |
+| GET/POST | `/api/users`, `/api/collectors`, `/api/products` | CRUD básico                                     |
