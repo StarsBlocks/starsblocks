@@ -27,8 +27,9 @@ export function SiteFooter({ variant = 'global' }: SiteFooterProps) {
       </div>
 
       <nav className="site-footer__links" aria-label="Enlaces legales">
+        <Link href="/aviso-legal">Aviso legal</Link>
         <Link href="/privacidad">Política de privacidad</Link>
-        <Link href="/terminos">Términos y condiciones</Link>
+        <Link href="/terminos">Condiciones Generales</Link>
       </nav>
     </footer>
   )

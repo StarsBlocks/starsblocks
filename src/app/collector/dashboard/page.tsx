@@ -133,6 +133,20 @@ export default function CollectorDashboardPage() {
       </header>
 
       <div className="dashboard-content">
+        <section className="dashboard-section leaderboard-callout">
+          <div>
+            <h3>Ranking de ubicaciones</h3>
+            <p>Consulta el leaderboard con las comunidades que más reciclan.</p>
+          </div>
+          <button
+            type="button"
+            className="leaderboard-button"
+            onClick={() => router.push('/leaderboard')}
+          >
+            Ver leaderboard
+          </button>
+        </section>
+
         <section className="dashboard-section" aria-live="polite">
           <h2>Panel de Recolector</h2>
           <p>Email: {session.user?.email}</p>
@@ -214,19 +228,7 @@ export default function CollectorDashboardPage() {
             </button>
           </form>
         </section>
-        <section className="dashboard-section leaderboard-callout">
-          <div>
-            <h3>Ranking de ubicaciones</h3>
-            <p>Consulta el leaderboard con las comunidades que más reciclan.</p>
-          </div>
-          <button
-            type="button"
-            className="leaderboard-button"
-            onClick={() => router.push('/leaderboard')}
-          >
-            Ver leaderboard
-          </button>
-        </section>
+
         <section className="dashboard-section">
           <h3>Recolecciones recientes</h3>
           {recentTransactions.length === 0 ? (
