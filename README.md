@@ -1,13 +1,13 @@
 # StarBlocks
-## Convierte tu reciclaje en bloques digitales y compite por el primer puesto.
+## Convierte tu reciclaje en bloques digitales
 
 <p align="center">
   <img src="./public/logo.jpg" alt="Logo de StarBlocks" width="180" height="180" />
 </p>
 
-StarBlocks es una plataforma web construida con Next.js 14, TypeScript y estilos custom (globals + variables) que conecta a recicladores urbanos con recolectores y registra cada entrega sobre la blockchain de BSV para garantizar trazabilidad y recompensas transparentes.
+StarBlocks es una plataforma que incentiva el reciclado a través de gamificación y recompensas registrando cada entrega sobre la blockchain de BSV para garantizar trazabilidad y transparecia.
 
-La identificación para la entrega de reciclaje se realiza mediante el uso de una llave NFC, que será entregada, una vez completado el registro, por el funcionario del ayuntamiento encargado del punto de recolección más cercano a su domicilio. Este registro puede realizarse online o presencialmente en el mismo punto de reciclaje. Alternativamente, los usuarios también pueden identificarse mediante un código QR visible en su página de usuario dentro de la plataforma. Así, cada entrega queda registrada en la blockchain, garantizando trazabilidad y recompensas transparentes para los usuarios.
+La entrega de residuos se realizará en una primera instancia en puntos de recogida, gestionados por el ayuntamiento, o empresas coolaborodas. La identificación para la entrega de reciclaje se realiza mediante el uso de una llave NFC, que será entregada, una vez completado el registro, por el funcionario del ayuntamiento encargado del punto de recolección más cercano a su domicilio. Este registro puede realizarse online o presencialmente en el mismo punto de reciclaje. Alternativamente, los usuarios también pueden identificarse mediante un código QR visible en su página de usuario dentro de la plataforma. Así, cada entrega queda registrada en la blockchain, garantizando trazabilidad y recompensas transparentes para los usuarios.
 
 ## Visión de futuro: Red IoT de reciclaje inteligente
 
