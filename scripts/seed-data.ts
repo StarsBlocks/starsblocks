@@ -148,7 +148,8 @@ async function seedData() {
       return acc
     }, {} as Record<string, number>)
 
-    Object.entries(usersByLocation)
+    const usersByLocationEntries = Object.entries(usersByLocation) as Array<[string, number]>
+    usersByLocationEntries
       .sort((a, b) => b[1] - a[1])
       .forEach(([loc, count]) => {
         console.log(`  ${loc}: ${count} usuarios`)
@@ -164,7 +165,8 @@ async function seedData() {
       return acc
     }, {} as Record<string, number>)
 
-    Object.entries(txByProduct)
+    const txByProductEntries = Object.entries(txByProduct) as Array<[string, number]>
+    txByProductEntries
       .sort((a, b) => b[1] - a[1])
       .forEach(([material, kg]) => {
         console.log(`  ${material}: ${kg.toFixed(1)} kg`)
