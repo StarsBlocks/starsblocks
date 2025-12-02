@@ -253,7 +253,8 @@ async function seedData() {
       acc[u.comunidad] = (acc[u.comunidad] || 0) + 1
       return acc
     }, {} as Record<string, number>)
-    Object.entries(usersByCommunity)
+    const usersByCommunityEntries = Object.entries(usersByCommunity) as Array<[string, number]>
+    usersByCommunityEntries
       .sort((a, b) => b[1] - a[1])
       .forEach(([com, count]) => console.log(`  ${com}: ${count}`))
 
@@ -264,9 +265,10 @@ async function seedData() {
       if (prod) acc[prod.name] = (acc[prod.name] || 0) + t.amount
       return acc
     }, {} as Record<string, number>)
-    Object.entries(kgByProduct)
+    const kgByProductEntries = Object.entries(kgByProduct) as Array<[string, number]>
+    kgByProductEntries
       .sort((a, b) => b[1] - a[1])
-      .forEach(([mat, kg]) => console.log(`  ${mat}: ${(kg as number).toFixed(1)} kg`))
+      .forEach(([mat, kg]) => console.log(`  ${mat}: ${kg.toFixed(1)} kg`))
 
     console.log('\n✅ Seed completado!')
 
